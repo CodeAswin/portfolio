@@ -15,12 +15,12 @@ const Reviews = () => {
   const reviews: Review[] = [
     {
       id: 1,
-      name: "Sarah Johnson",
+      name: "Toxic Decit",
       rating: 5,
-      comment: "Amazing work! The quality and attention to detail exceeded my expectations. Would definitely recommend!",
-      project: 'Thumbnail Design',
+      comment: "It was good. Price Was awesome for the work!",
+      project: 'Thumbnail Design For My friend',
       enabled: true,
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+      image: "https://cdn.discordapp.com/attachments/1185125884789800960/1362460961113505893/IMG_1309.webp?ex=68027a26&is=680128a6&hm=5c8cc7ba42e3ddd0f02403032dbe1b86617e8e3178b7ff1302bf1e202141ebde&=100&h=100&fit=crop"
     },
     {
       id: 2,
@@ -28,7 +28,7 @@ const Reviews = () => {
       rating: 5,
       comment: "Incredible talent and professionalism. The final result was exactly what I was looking for!",
       project: 'Video Editing',
-      enabled: true,
+      enabled: false,
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
     },
     {
@@ -37,7 +37,7 @@ const Reviews = () => {
       rating: 5,
       comment: "Outstanding service! The creativity and dedication to the project was remarkable.",
       project: 'Thumbnail Design',
-      enabled: true,
+      enabled: false,
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
     }
   ];

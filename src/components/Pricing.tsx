@@ -41,9 +41,14 @@ const Pricing = () => {
               <p className="text-white text-center">
                 For pricing details and to get started, join our Discord server
               </p>
-              <button className="mt-4 w-full bg-[#5865F2] hover:bg-[#4752C4] text-white py-3 px-6 rounded-lg transition">
-                Join Discord Server
-              </button>
+              <a
+  href="https://discord.gg/6e2YQTrRyf"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="mt-4 block text-center w-full bg-[#5865F2] hover:bg-[#4752C4] text-white py-3 px-6 rounded-lg transition"
+>
+  Join Discord Server
+</a>
             </div>
           </div>
         </div>

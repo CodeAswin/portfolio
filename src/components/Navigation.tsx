@@ -11,20 +11,20 @@ const Navigation = () => {
           <div className="flex items-center gap-4 animate-slide-in">
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 overflow-hidden ring-2 ring-white/20 hover:ring-blue-500/50 transition-all transform hover:scale-105">
               <img
-                src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=100"
+                src="https://cdn.discordapp.com/attachments/1261514475685675039/1362683857748492379/websitepfp.png?ex=680349bd&is=6801f83d&hm=35f3c74e8286f4ddbbbe31a4332f5d736193e2ffb458dc6fd55ca1548fa401bb&=80&w=100"
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="hidden md:flex items-center gap-2 animate-fade-in animation-delay-500">
               <Star className="w-4 h-4 text-yellow-500 animate-pulse" />
-              <span className="text-white/80 text-sm">Premium Designer</span>
+              <span className="text-white/80 text-sm">Aswin Designer!</span>
             </div>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
             {[
-              { href: '#hero', icon: Box, label: 'Home' },
+              { href: '#home', icon: Box, label: 'Home' },
               { href: '#works', icon: Star, label: 'Works' },
               { href: '#reviews', icon: MessageCircle, label: 'Reviews' },
               { href: '#pricing', icon: CreditCard, label: 'Pricing' }
