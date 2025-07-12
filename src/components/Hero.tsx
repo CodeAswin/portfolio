@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, Sparkles, Cube, Video, Image, Play, Star } from 'lucide-react';
+import { ArrowDown, Sparkles, Cuboid as Cube, Video, Image, Play, Star } from 'lucide-react';
 
 const Hero = () => {
   return (
