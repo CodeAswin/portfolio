@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useModalStore } from '../store/modalStore';
-import { Play, Eye, ExternalLink } from 'lucide-react';
+import { Play, Eye, ExternalLink, Grid, Video } from 'lucide-react';
 
 interface WorkItem {
   id: number;
@@ -75,7 +75,7 @@ const Works = () => {
     {
       id: 1,
       type: 'thumbnail',
-      title: 'Gaming Thumbnail 1',
+      title: 'Gaming Thumbnail Design',
       client: 'Gaming Channel',
       url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
       enabled: false,
@@ -91,8 +91,8 @@ const Works = () => {
     {
       id: 3,
       type: 'thumbnail',
-      title: 'Stream Overlay',
-      client: 'Twitch Streamer',
+      title: 'Stream Overlay Design',
+      client: 'Content Creator',
       url: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&h=800&fit=crop',
       enabled: false
     },
@@ -114,55 +114,70 @@ const Works = () => {
   };
 
   return (
-    <section id="works" className="min-h-screen bg-gradient-to-b from-black/95 via-gray-900/50 to-black/95 py-20 relative overflow-hidden">
-      {/* Background decorative elements */}
+    <section id="works" className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-20 relative overflow-hidden">
+      {/* Modern background pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20"></div>
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(45deg, #fff 25%, transparent 25%), linear-gradient(-45deg, #fff 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #fff 75%), linear-gradient(-45deg, transparent 75%, #fff 75%)`,
+          backgroundSize: '60px 60px',
+          backgroundPosition: '0 0, 0 30px, 30px -30px, -30px 0px'
+        }}></div>
+      </div>
+
+      {/* Floating elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 right-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 left-20 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-500/3 to-purple-500/3 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-float-reverse"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 animate-fade-in">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-            <span className="text-blue-400 font-medium tracking-wider uppercase text-sm">Portfolio</span>
-            <div className="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6">
+            <Grid className="w-5 h-5 text-purple-400" />
+            <span className="text-purple-400 font-medium">Featured Work</span>
           </div>
-          <h2 className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-purple-200 mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-            My Works
+          
+          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
+            Recent <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Projects</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed animate-fade-in animation-delay-500">
-            Explore my creative journey through <span className="text-blue-400 font-semibold">stunning designs</span> and 
-            <span className="text-purple-400 font-semibold"> engaging content</span> crafted for amazing clients
+          
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            Showcasing creative excellence through stunning visual designs and engaging video content
           </p>
         </div>
 
-        <div className="flex justify-center gap-2 mb-12 animate-fade-in animation-delay-1000">
+        <div className="flex justify-center gap-2 mb-12 animate-fade-in animation-delay-500">
           <button
             onClick={() => setActiveTab('thumbnails')}
-            className={`relative px-8 py-4 rounded-full transition-all duration-500 transform hover:scale-105 font-semibold ${
+            className={`relative px-8 py-4 rounded-2xl transition-all duration-500 transform hover:scale-105 font-bold text-lg overflow-hidden ${
               activeTab === 'thumbnails'
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl shadow-blue-500/25'
-                : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl shadow-purple-500/25'
+                : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
             }`}
           >
-            <span className="relative z-10">Thumbnails</span>
+            <span className="relative z-10 flex items-center gap-2">
+              <Grid className="w-5 h-5" />
+              Thumbnails
+            </span>
             {activeTab === 'thumbnails' && (
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 animate-pulse"></div>
             )}
           </button>
           <button
             onClick={() => setActiveTab('videos')}
-            className={`relative px-8 py-4 rounded-full transition-all duration-500 transform hover:scale-105 font-semibold ${
+            className={`relative px-8 py-4 rounded-2xl transition-all duration-500 transform hover:scale-105 font-bold text-lg overflow-hidden ${
               activeTab === 'videos'
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl shadow-blue-500/25'
-                : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl shadow-purple-500/25'
+                : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
             }`}
           >
-            <span className="relative z-10">Videos</span>
+            <span className="relative z-10 flex items-center gap-2">
+              <Video className="w-5 h-5" />
+              Videos
+            </span>
             {activeTab === 'videos' && (
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 animate-pulse"></div>
             )}
           </button>
         </div>
@@ -176,7 +191,7 @@ const Works = () => {
             .map((item, index) => (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 hover:border-blue-500/30 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20"
+                className="group relative overflow-hidden rounded-3xl cursor-pointer animate-fade-in bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
                 style={{ animationDelay: `${index * 200}ms` }}
                 onClick={() => openModal({
                   type: item.type,
@@ -184,40 +199,37 @@ const Works = () => {
                   title: item.title,
                 })}
               >
-                <div className="aspect-video w-full overflow-hidden rounded-t-2xl relative">
+                <div className="aspect-video w-full overflow-hidden rounded-t-3xl relative">
                   {getThumbnailContent(item)}
                   
-                  {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
-                  {/* Play button for videos */}
                   {item.type === 'video' && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-xl">
+                      <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-2xl">
                         <Play className="w-10 h-10 text-white ml-1" />
                       </div>
                     </div>
                   )}
                   
-                  {/* View icon for thumbnails */}
                   {item.type === 'thumbnail' && (
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        <Eye className="w-5 h-5 text-white" />
+                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <Eye className="w-6 h-6 text-white" />
                       </div>
                     </div>
                   )}
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-white text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-white text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">
                     {item.title}
                   </h3>
                   <div className="flex items-center justify-between">
-                    <p className="text-gray-400 text-sm">
-                      <span className="text-blue-400 font-medium">Client:</span> {item.client}
+                    <p className="text-slate-400 text-sm">
+                      <span className="text-purple-400 font-medium">Client:</span> {item.client}
                     </p>
-                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
+                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-purple-400 transition-colors" />
                   </div>
                 </div>
               </div>
@@ -230,12 +242,12 @@ const Works = () => {
           (activeTab === 'videos' && item.type === 'video'))
         ).length === 0 && (
           <div className="text-center py-20">
-            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
-              <Eye className="w-12 h-12 text-gray-400" />
+            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
+              <Eye className="w-12 h-12 text-slate-400" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-4">Coming Soon</h3>
-            <p className="text-gray-400 text-lg max-w-md mx-auto">
-              Amazing {activeTab} are being crafted. Check back soon to see the latest creative works!
+            <h3 className="text-3xl font-bold text-white mb-4">Portfolio Coming Soon</h3>
+            <p className="text-slate-400 text-lg max-w-md mx-auto">
+              Exciting {activeTab} projects are currently in development. Stay tuned for updates!
             </p>
           </div>
         )}
