@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useModalStore } from '../store/modalStore';
-import { Play, Eye, Cube, Video, Image, ExternalLink, Layers, Palette } from 'lucide-react';
+import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette } from 'lucide-react';
 
 interface WorkItem {
   id: number;
