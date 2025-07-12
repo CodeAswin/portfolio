@@ -1,5 +1,5 @@
-import React from 'react';
-import { Star, Quote, MessageSquare, Users, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Star, Quote, MessageSquare, Users, TrendingUp, Award } from 'lucide-react';
 
 interface Review {
   id: number;
@@ -12,12 +12,20 @@ interface Review {
 }
 
 const Reviews = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const reviews: Review[] = [
     {
       id: 1,
       name: "Toxic Decit",
       rating: 5,
-      comment: "Outstanding work quality and professional service. The thumbnails significantly boosted our channel's click-through rate!",
+      comment: "Outstanding work quality and professional service. The thumbnails significantly boosted our channel's performance!",
       project: 'Thumbnail Design',
       enabled: true,
       image: "https://cdn.discordapp.com/attachments/1185125884789800960/1362460961113505893/IMG_1309.webp?ex=68027a26&is=680128a6&hm=5c8cc7ba42e3ddd0f02403032dbe1b86617e8e3178b7ff1302bf1e202141ebde&=100&h=100&fit=crop"
@@ -26,8 +34,8 @@ const Reviews = () => {
       id: 2,
       name: "Alex Johnson",
       rating: 5,
-      comment: "Incredible attention to detail and fast delivery. Highly recommend for any video editing needs.",
-      project: 'Video Editing',
+      comment: "Incredible attention to detail and fast delivery. Highly recommend for any creative project needs.",
+      project: '3D Modeling',
       enabled: false,
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
     },
@@ -36,135 +44,156 @@ const Reviews = () => {
       name: "Sarah Chen",
       rating: 5,
       comment: "Creative excellence that exceeded expectations. Perfect collaboration from start to finish.",
-      project: 'Brand Design',
+      project: 'Video Editing',
       enabled: false,
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
     }
   ];
 
   return (
-    <section id="reviews" className="min-h-screen bg-gradient-to-b from-slate-900 via-gray-900 to-black py-24 relative overflow-hidden">
-      {/* Background elements */}
+    <section id="reviews" className="min-h-screen bg-gradient-to-b from-gray-900 via-slate-900 to-black py-32 relative overflow-hidden">
+      {/* 3D Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-transparent to-fuchsia-900/20"></div>
-        <div className="absolute top-10 left-10 w-80 h-80 bg-gradient-to-r from-violet-500/10 to-purple-500/10 rounded-full blur-3xl animate-float-slow"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-r from-fuchsia-500/10 to-pink-500/10 rounded-full blur-3xl animate-float-reverse"></div>
+        {/* Floating 3D shapes that respond to scroll */}
+        <div 
+          className="absolute top-20 right-20 w-36 h-36 bg-gradient-to-br from-purple-400/10 to-pink-500/10 rounded-3xl transform rotate-12 shadow-2xl shadow-purple-500/5"
+          style={{
+            transform: `translateY(${scrollY * 0.08}px) rotate(${12 + scrollY * 0.04}deg)`,
+          }}
+        ></div>
+        <div 
+          className="absolute bottom-32 left-20 w-44 h-44 bg-gradient-to-br from-cyan-400/10 to-blue-500/10 rounded-full shadow-2xl shadow-cyan-500/5"
+          style={{
+            transform: `translateY(${scrollY * -0.06}px) scale(${1 + scrollY * 0.0001})`,
+          }}
+        ></div>
+        <div 
+          className="absolute top-1/2 right-1/4 w-28 h-28 bg-gradient-to-br from-emerald-400/10 to-teal-500/10 transform -rotate-45 shadow-2xl shadow-emerald-500/5"
+          style={{
+            transform: `translateY(${scrollY * 0.1}px) rotate(${-45 - scrollY * 0.02}deg)`,
+          }}
+        ></div>
         
-        {/* Subtle grid pattern */}
+        {/* Subtle 3D grid */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-          backgroundSize: '80px 80px'
+          backgroundImage: `
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '120px 120px',
+          transform: `perspective(1000px) rotateX(${45 + scrollY * 0.01}deg)`
         }}></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section header */}
-        <div className="text-center mb-20 animate-fade-in">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8">
-            <MessageSquare className="w-5 h-5 text-violet-400" />
-            <span className="text-violet-400 font-medium">Client Testimonials</span>
+        {/* Section Header */}
+        <div className="text-center mb-24 animate-fade-in">
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-full border border-slate-600/30 mb-12 shadow-2xl">
+            <MessageSquare className="w-6 h-6 text-purple-400" />
+            <span className="text-purple-400 font-semibold text-lg">Client Testimonials</span>
           </div>
           
-          <h2 className="text-6xl md:text-7xl font-black text-white mb-8 tracking-tight">
-            Client <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Success</span>
+          <h2 className="text-7xl md:text-8xl font-black text-slate-100 mb-8 tracking-tight">
+            Client <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Success</span>
           </h2>
           
-          <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-            Real feedback from content creators who've seen measurable growth with our designs
+          <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+            Real feedback from creators who've achieved remarkable results with professional designs
           </p>
           
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12 animate-fade-in animation-delay-500">
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <Star className="w-8 h-8 text-yellow-400" />
+          <div className="flex flex-wrap justify-center gap-8 mt-16 animate-fade-in animation-delay-500">
+            <div className="group flex items-center gap-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl px-10 py-8 border border-slate-600/30 hover:border-yellow-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+              <Star className="w-10 h-10 text-yellow-400 group-hover:rotate-12 transition-transform" />
               <div className="text-left">
-                <div className="text-white font-bold text-2xl">5.0</div>
-                <div className="text-white/60 text-sm">Average Rating</div>
+                <div className="text-slate-100 font-bold text-3xl">5.0</div>
+                <div className="text-slate-400 text-sm font-medium">Average Rating</div>
               </div>
             </div>
             
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <Users className="w-8 h-8 text-green-400" />
+            <div className="group flex items-center gap-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl px-10 py-8 border border-slate-600/30 hover:border-emerald-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+              <Users className="w-10 h-10 text-emerald-400 group-hover:rotate-12 transition-transform" />
               <div className="text-left">
-                <div className="text-white font-bold text-2xl">100%</div>
-                <div className="text-white/60 text-sm">Satisfaction</div>
+                <div className="text-slate-100 font-bold text-3xl">100%</div>
+                <div className="text-slate-400 text-sm font-medium">Satisfaction</div>
               </div>
             </div>
             
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <TrendingUp className="w-8 h-8 text-blue-400" />
+            <div className="group flex items-center gap-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl px-10 py-8 border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+              <TrendingUp className="w-10 h-10 text-cyan-400 group-hover:rotate-12 transition-transform" />
               <div className="text-left">
-                <div className="text-white font-bold text-2xl">+40%</div>
-                <div className="text-white/60 text-sm">Avg CTR Boost</div>
+                <div className="text-slate-100 font-bold text-3xl">+50%</div>
+                <div className="text-slate-400 text-sm font-medium">Performance Boost</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Reviews grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        {/* Reviews Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-24">
           {reviews
             .filter(review => review.enabled)
             .map((review, index) => (
               <div
                 key={review.id}
-                className="group relative bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:border-violet-500/50 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-violet-500/20 animate-fade-in"
+                className="group relative bg-gradient-to-br from-slate-800/30 to-slate-700/30 backdrop-blur-xl rounded-3xl p-10 border border-slate-600/30 hover:border-purple-500/50 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 animate-fade-in"
                 style={{ animationDelay: `${index * 200}ms` }}
               >
                 {/* Quote decoration */}
-                <div className="absolute top-6 right-6 opacity-20">
-                  <Quote className="w-12 h-12 text-violet-400" />
+                <div className="absolute top-8 right-8 opacity-20">
+                  <Quote className="w-16 h-16 text-purple-400 transform group-hover:scale-110 transition-transform" />
                 </div>
                 
                 {/* Client info */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-6 mb-8">
                   <div className="relative">
                     <img
                       src={review.image}
                       alt={review.name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-violet-500/30 group-hover:scale-110 transition-transform duration-300"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-purple-500/30 group-hover:scale-110 transition-transform duration-500 shadow-lg"
                     />
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 group-hover:animate-pulse"></div>
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 group-hover:animate-pulse"></div>
                   </div>
                   <div>
-                    <div className="text-white font-bold text-lg">{review.name}</div>
-                    <div className="flex items-center gap-1 mb-1">
+                    <div className="text-slate-100 font-bold text-xl">{review.name}</div>
+                    <div className="flex items-center gap-2 mb-2">
                       {Array.from({ length: review.rating }).map((_, i) => (
                         <Star 
                           key={i} 
-                          className="w-4 h-4 fill-yellow-400 text-yellow-400" 
+                          className="w-5 h-5 fill-yellow-400 text-yellow-400" 
                         />
                       ))}
                     </div>
-                    <div className="text-violet-400 text-sm font-medium">
+                    <div className="text-purple-400 text-sm font-semibold px-3 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
                       {review.project}
                     </div>
                   </div>
                 </div>
                 
                 {/* Review content */}
-                <blockquote className="text-white/80 text-lg leading-relaxed group-hover:text-white transition-colors duration-300 relative z-10">
+                <blockquote className="text-slate-300 text-lg leading-relaxed group-hover:text-slate-200 transition-colors duration-500 relative z-10">
                   "{review.comment}"
                 </blockquote>
                 
                 {/* Bottom accent */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-b-3xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-b-3xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
               </div>
             ))}
         </div>
 
-        {/* Call to action */}
+        {/* Call to Action */}
         <div className="text-center animate-fade-in animation-delay-1000">
-          <div className="bg-gradient-to-r from-violet-900/30 to-fuchsia-900/30 rounded-3xl p-12 backdrop-blur-md border border-white/20 max-w-3xl mx-auto">
-            <h3 className="text-4xl font-bold text-white mb-6">Ready to Boost Your Content?</h3>
-            <p className="text-white/70 mb-8 text-lg leading-relaxed">
-              Join successful creators who've transformed their channels with professional designs
+          <div className="bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-3xl p-16 border border-slate-600/30 max-w-4xl mx-auto shadow-2xl">
+            <Award className="w-20 h-20 text-cyan-400 mx-auto mb-8" />
+            <h3 className="text-5xl font-bold text-slate-100 mb-8">Ready to Create Something Amazing?</h3>
+            <p className="text-slate-300 mb-12 text-xl leading-relaxed max-w-2xl mx-auto">
+              Join successful creators who've transformed their content with professional 3D art, thumbnails, and video editing
             </p>
             <a
               href="#pricing"
-              className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl text-white font-bold text-lg hover:shadow-2xl hover:shadow-violet-500/25 transition-all transform hover:scale-105"
+              className="inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-2xl text-white font-bold text-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all transform hover:scale-110 duration-500"
             >
-              <MessageSquare className="w-5 h-5" />
+              <MessageSquare className="w-6 h-6" />
               Start Your Project
             </a>
           </div>

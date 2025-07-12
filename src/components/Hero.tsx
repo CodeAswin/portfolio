@@ -1,107 +1,134 @@
 import React from 'react';
-import { ArrowDown, Sparkles, Zap, Target, Play } from 'lucide-react';
+import { ArrowDown, Sparkles, Cube, Video, Image, Play, Star } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section id="hero" className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-slate-900 to-black">
-      {/* Animated background layers */}
+    <section id="hero" className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-gray-900 to-black">
+      {/* 3D Background Elements */}
       <div className="absolute inset-0">
-        {/* Primary gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-900/30 via-purple-900/20 to-fuchsia-900/30"></div>
+        {/* Animated 3D-style geometric shapes */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-3xl transform rotate-45 animate-float-slow shadow-2xl shadow-cyan-500/10"></div>
+        <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-2xl transform -rotate-12 animate-float-reverse shadow-2xl shadow-purple-500/10"></div>
+        <div className="absolute bottom-32 left-32 w-40 h-40 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-full animate-pulse-slow shadow-2xl shadow-emerald-500/10"></div>
+        <div className="absolute bottom-20 right-20 w-28 h-28 bg-gradient-to-br from-orange-400/20 to-red-500/20 transform rotate-12 animate-float-slow animation-delay-1000 shadow-2xl shadow-orange-500/10"></div>
         
-        {/* Animated orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-fuchsia-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse-slow animation-delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-float-slow"></div>
-        
-        {/* Subtle grid pattern */}
+        {/* 3D Grid Background */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
+          backgroundImage: `
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '100px 100px',
+          transform: 'perspective(1000px) rotateX(60deg)'
         }}></div>
+        
+        {/* Floating particles */}
+        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-cyan-400 rounded-full animate-ping animation-delay-500"></div>
+        <div className="absolute top-3/4 right-1/4 w-3 h-3 bg-purple-400 rounded-full animate-ping animation-delay-1000"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-ping animation-delay-1500"></div>
       </div>
       
-      <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
-        {/* Status badge */}
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8 animate-fade-in">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          <span className="text-white/90 font-medium">Available for Projects</span>
+      <div className="relative z-10 text-center px-6 max-w-7xl mx-auto">
+        {/* Status Badge */}
+        <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-full border border-slate-600/30 mb-12 animate-fade-in shadow-2xl">
+          <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full animate-pulse shadow-lg shadow-emerald-500/50"></div>
+          <span className="text-slate-200 font-semibold text-lg">Available for Projects</span>
         </div>
         
-        {/* Main heading */}
-        <h1 className="text-7xl md:text-8xl lg:text-9xl font-black mb-6 animate-fade-in animation-delay-300">
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-violet-200 to-fuchsia-200 leading-none">
-            ASWIN
-          </span>
-        </h1>
+        {/* Main Heading with 3D effect */}
+        <div className="mb-8 animate-fade-in animation-delay-300">
+          <h1 className="text-8xl md:text-9xl lg:text-[12rem] font-black mb-4 leading-none">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-300 to-slate-100 drop-shadow-2xl">
+              ASWIN
+            </span>
+          </h1>
+          <div className="flex flex-wrap justify-center gap-6 text-2xl md:text-3xl font-bold text-slate-300">
+            <span className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl backdrop-blur-sm border border-cyan-500/30">
+              <Cube className="w-8 h-8 text-cyan-400" />
+              3D Artist
+            </span>
+            <span className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl backdrop-blur-sm border border-purple-500/30">
+              <Image className="w-8 h-8 text-purple-400" />
+              Thumbnail Designer
+            </span>
+            <span className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl backdrop-blur-sm border border-emerald-500/30">
+              <Video className="w-8 h-8 text-emerald-400" />
+              Video Editor
+            </span>
+          </div>
+        </div>
         
-        <div className="space-y-6 mb-12 animate-fade-in animation-delay-600">
-          <h2 className="text-4xl md:text-5xl font-bold text-white/95">
-            Visual <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Designer</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 mx-auto rounded-full"></div>
+        {/* Location Badge */}
+        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-full border border-orange-500/30 mb-12 animate-fade-in animation-delay-600">
+          <div className="w-6 h-4 bg-gradient-to-b from-orange-500 via-white to-emerald-500 rounded-sm"></div>
+          <span className="text-slate-200 font-medium">Based in India</span>
         </div>
         
         {/* Description */}
-        <p className="text-xl md:text-2xl text-white/80 font-light max-w-4xl mx-auto leading-relaxed mb-12 animate-fade-in animation-delay-900">
-          Creating compelling thumbnails and engaging video content that drives views, 
-          builds audiences, and delivers measurable results for content creators
+        <p className="text-2xl md:text-3xl text-slate-300 font-light max-w-5xl mx-auto leading-relaxed mb-16 animate-fade-in animation-delay-900">
+          Creating stunning <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-semibold">3D visuals</span>, 
+          eye-catching <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 font-semibold">thumbnails</span>, 
+          and engaging <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 font-semibold">video content</span> 
+          that drives results
         </p>
         
-        {/* Feature highlights */}
-        <div className="flex flex-wrap items-center justify-center gap-8 mb-16 animate-fade-in animation-delay-1200">
-          <div className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Target className="w-6 h-6 text-white" />
+        {/* Feature Stats */}
+        <div className="flex flex-wrap justify-center gap-8 mb-16 animate-fade-in animation-delay-1200">
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+            <Star className="w-8 h-8 text-yellow-400 group-hover:rotate-12 transition-transform" />
+            <div className="text-left">
+              <div className="text-slate-100 font-bold text-2xl">Premium</div>
+              <div className="text-slate-400 text-sm">Quality Work</div>
             </div>
-            <span className="text-white/90 font-semibold text-lg">High Converting</span>
           </div>
           
-          <div className="w-3 h-3 bg-violet-400/60 rounded-full"></div>
-          
-          <div className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Zap className="w-6 h-6 text-white" />
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-purple-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+            <Sparkles className="w-8 h-8 text-purple-400 group-hover:rotate-12 transition-transform" />
+            <div className="text-left">
+              <div className="text-slate-100 font-bold text-2xl">Fast</div>
+              <div className="text-slate-400 text-sm">Delivery</div>
             </div>
-            <span className="text-white/90 font-semibold text-lg">Fast Turnaround</span>
           </div>
           
-          <div className="w-3 h-3 bg-fuchsia-400/60 rounded-full"></div>
-          
-          <div className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-6 h-6 text-white" />
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-emerald-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+            <Cube className="w-8 h-8 text-emerald-400 group-hover:rotate-12 transition-transform" />
+            <div className="text-left">
+              <div className="text-slate-100 font-bold text-2xl">3D</div>
+              <div className="text-slate-400 text-sm">Expertise</div>
             </div>
-            <span className="text-white/90 font-semibold text-lg">Premium Quality</span>
           </div>
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20 animate-fade-in animation-delay-1500">
+        <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-20 animate-fade-in animation-delay-1500">
           <a
             href="#works"
-            className="group relative px-12 py-5 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 rounded-2xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-violet-500/25 overflow-hidden"
+            className="group relative px-12 py-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-2xl text-white font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/25 overflow-hidden"
           >
-            <span className="relative z-10 flex items-center gap-3">
-              <Play className="w-5 h-5" />
+            <span className="relative z-10 flex items-center gap-4">
+              <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
               View Portfolio
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
           </a>
           
           <a
             href="#pricing"
-            className="group relative px-12 py-5 bg-white/10 backdrop-blur-md border-2 border-white/30 rounded-2xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:bg-white/20 hover:border-white/50"
+            className="group relative px-12 py-6 bg-gradient-to-r from-slate-800/80 to-slate-700/80 backdrop-blur-xl border-2 border-slate-600/50 rounded-2xl text-slate-100 font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:bg-gradient-to-r hover:from-slate-700/80 hover:to-slate-600/80 hover:border-slate-500/70 hover:shadow-2xl"
           >
-            <span className="relative z-10">Get Quote</span>
+            <span className="relative z-10 flex items-center gap-4">
+              <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+              Get Quote
+            </span>
           </a>
         </div>
         
-        {/* Scroll indicator */}
-        <div className="flex flex-col items-center gap-4 animate-fade-in animation-delay-2000">
-          <span className="text-white/60 text-sm font-medium tracking-wide">EXPLORE WORK</span>
-          <div className="w-8 h-12 border-2 border-white/40 rounded-full flex justify-center p-2">
-            <ArrowDown className="w-4 h-4 text-white/60 animate-bounce" />
+        {/* Scroll Indicator */}
+        <div className="flex flex-col items-center gap-6 animate-fade-in animation-delay-2000">
+          <span className="text-slate-400 text-sm font-semibold tracking-widest uppercase">Explore My Work</span>
+          <div className="w-10 h-16 border-2 border-slate-500/50 rounded-full flex justify-center p-3 hover:border-cyan-500/70 transition-colors">
+            <ArrowDown className="w-5 h-5 text-slate-400 animate-bounce" />
           </div>
         </div>
       </div>
