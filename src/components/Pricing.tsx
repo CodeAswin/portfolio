@@ -138,48 +138,6 @@ const Pricing = () => {
               <p className="text-slate-300 text-lg leading-relaxed">Professional results with revision support until you're completely satisfied</p>
             </div>
           </div>
-          
-          {/* Get Quote Section */}
-          <div className="bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-3xl p-16 text-center animate-fade-in animation-delay-1500 border border-slate-600/30 shadow-2xl">
-            <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-8">
-              <Zap className="w-12 h-12 text-white" />
-            </div>
-            <h3 className="text-5xl font-bold text-slate-100 mb-8">Ready to Start Your Project?</h3>
-            <p className="text-slate-300 text-xl mb-12 max-w-3xl mx-auto leading-relaxed">
-              Get in touch to discuss your project requirements and receive a personalized quote tailored to your creative needs
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-              <a
-                href="mailto:contact@aswin.dev"
-                className="group relative px-12 py-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white font-bold rounded-2xl transition-all transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/25 flex items-center gap-4 text-xl overflow-hidden"
-              >
-                <CreditCard className="w-7 h-7 group-hover:rotate-12 transition-transform" />
-                <span className="relative z-10">Get Custom Quote</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </a>
-              
-              <div className="text-slate-400 text-lg font-medium">
-                Response within 24 hours
-              </div>
-            </div>
-            
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center gap-12 mt-16 pt-12 border-t border-slate-600/30">
-              <div className="flex items-center gap-4 text-slate-300">
-                <Shield className="w-6 h-6 text-emerald-400" />
-                <span className="font-semibold text-lg">Secure & Professional</span>
-              </div>
-              <div className="flex items-center gap-4 text-slate-300">
-                <Clock className="w-6 h-6 text-cyan-400" />
-                <span className="font-semibold text-lg">Fast Turnaround</span>
-              </div>
-              <div className="flex items-center gap-4 text-slate-300">
-                <Award className="w-6 h-6 text-purple-400" />
-                <span className="font-semibold text-lg">Quality Guaranteed</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

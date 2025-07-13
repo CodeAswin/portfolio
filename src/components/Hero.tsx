@@ -112,16 +112,6 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
           </a>
-          
-          <a
-            href="#pricing"
-            className="group relative px-12 py-6 bg-gradient-to-r from-slate-800/80 to-slate-700/80 backdrop-blur-xl border-2 border-slate-600/50 rounded-2xl text-slate-100 font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:bg-gradient-to-r hover:from-slate-700/80 hover:to-slate-600/80 hover:border-slate-500/70 hover:shadow-2xl"
-          >
-            <span className="relative z-10 flex items-center gap-4">
-              <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-              Get Quote
-            </span>
-          </a>
         </div>
         
         {/* Scroll Indicator */}

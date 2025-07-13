@@ -181,21 +181,14 @@ const Reviews = () => {
             ))}
         </div>
 
-        {/* Call to Action */}
+        {/* Portfolio Summary */}
         <div className="text-center animate-fade-in animation-delay-1000">
           <div className="bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-3xl p-16 border border-slate-600/30 max-w-4xl mx-auto shadow-2xl">
             <Award className="w-20 h-20 text-cyan-400 mx-auto mb-8" />
-            <h3 className="text-5xl font-bold text-slate-100 mb-8">Ready to Create Something Amazing?</h3>
-            <p className="text-slate-300 mb-12 text-xl leading-relaxed max-w-2xl mx-auto">
-              Join successful creators who've transformed their content with professional 3D art, thumbnails, and video editing
+            <h3 className="text-5xl font-bold text-slate-100 mb-8">Professional Creative Services</h3>
+            <p className="text-slate-300 text-xl leading-relaxed max-w-2xl mx-auto">
+              Delivering high-quality 3D art, engaging thumbnails, and professional video editing that helps creators stand out and achieve better results
             </p>
-            <a
-              href="#pricing"
-              className="inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-2xl text-white font-bold text-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all transform hover:scale-110 duration-500"
-            >
-              <MessageSquare className="w-6 h-6" />
-              Start Your Project
-            </a>
           </div>
         </div>
       </div>
