@@ -70,12 +70,6 @@ const Navigation = () => {
               </a>
             ))}
           </div>
-
-          {/* Status Indicator */}
-          <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-emerald-500/20 to-green-500/20 backdrop-blur-sm rounded-full border border-emerald-500/30 animate-fade-in animation-delay-1000">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-lg shadow-emerald-400/50"></div>
-            <span className="text-emerald-300 font-medium text-sm">Available</span>
-          </div>
           
           {/* Mobile Menu Button */}
           <div className="lg:hidden animate-fade-in animation-delay-500">
@@ -91,6 +85,12 @@ const Navigation = () => {
           </div>
         </div>
 
+        {/* Mobile Menu */}
+        <div className={`lg:hidden transition-all duration-500 overflow-hidden ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className="py-4 space-y-2 bg-slate-800/50 backdrop-blur-xl rounded-2xl mt-4 border border-slate-700/50">
+            {navItems.map((item, index) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -103,7 +103,6 @@ const Navigation = () => {
                 <ChevronDown className="w-4 h-4 ml-auto opacity-50 group-hover:opacity-100 transition-opacity" />
               </a>
             ))}
-            
           </div>
         </div>
       </div>
