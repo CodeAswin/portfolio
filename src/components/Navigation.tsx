@@ -17,7 +17,7 @@ const Navigation = () => {
     { href: '#hero', icon: Palette, label: 'Home', color: 'text-cyan-400' },
     { href: '#works', icon: Eye, label: 'Portfolio', color: 'text-purple-400' },
     { href: '#reviews', icon: Star, label: 'Reviews', color: 'text-emerald-400' },
-    { href: '#pricing', icon: CreditCard, label: 'Pricing', color: 'text-orange-400' }
+    { href: '#payment', icon: CreditCard, label: 'Payment', color: 'text-orange-400' }
   ];
 
   return (
