@@ -299,6 +299,34 @@
   animation: quantum-spin 10s linear infinite;
 }
 
+.animate-matrix-rain-enhanced {
+  animation: matrix-rain-enhanced 12s linear infinite;
+}
+
+.animate-neon-glow-enhanced {
+  animation: neon-glow-enhanced 3s ease-in-out infinite;
+}
+
+.animate-hologram-enhanced {
+  animation: hologram-enhanced 6s ease-in-out infinite;
+}
+
+.animate-cyber-glitch-enhanced {
+  animation: cyber-glitch-enhanced 4s ease-in-out infinite;
+}
+
+.animate-data-stream-enhanced {
+  animation: data-stream-enhanced 8s ease-in-out infinite;
+}
+
+.animate-quantum-spin-enhanced {
+  animation: quantum-spin-enhanced 15s linear infinite;
+}
+
+.animate-pulse-glow-enhanced {
+  animation: pulse-glow-enhanced 3s ease-in-out infinite;
+}
+
 @keyframes scale-bounce {
   0%, 100% {
     transform: scale(1);
@@ -506,6 +534,155 @@
   }
   100% {
     transform: rotateX(360deg) rotateY(180deg) rotateZ(135deg);
+  }
+}
+
+@keyframes matrix-rain-enhanced {
+  0% {
+    transform: translateY(-100vh) scaleY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-80vh) scaleY(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(80vh) scaleY(1);
+  }
+  100% {
+    transform: translateY(100vh) scaleY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes neon-glow-enhanced {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor,
+      0 0 20px currentColor,
+      0 0 35px currentColor;
+    box-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      0 0 40px currentColor,
+      0 0 70px currentColor;
+    box-shadow: 
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor;
+  }
+}
+
+@keyframes hologram-enhanced {
+  0%, 100% {
+    opacity: 1;
+    transform: translateZ(0) rotateY(0deg);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translateZ(10px) rotateY(5deg);
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateZ(-5px) rotateY(-3deg);
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    opacity: 0.7;
+    transform: translateZ(15px) rotateY(-5deg);
+    filter: hue-rotate(270deg);
+  }
+}
+
+@keyframes cyber-glitch-enhanced {
+  0%, 100% {
+    transform: translate(0) scale(1);
+    filter: hue-rotate(0deg) contrast(1);
+  }
+  10% {
+    transform: translate(-3px, 3px) scale(1.01);
+    filter: hue-rotate(90deg) contrast(1.2);
+  }
+  20% {
+    transform: translate(-3px, -3px) scale(0.99);
+    filter: hue-rotate(180deg) contrast(0.8);
+  }
+  30% {
+    transform: translate(3px, 3px) scale(1.02);
+    filter: hue-rotate(270deg) contrast(1.1);
+  }
+  40% {
+    transform: translate(3px, -3px) scale(0.98);
+    filter: hue-rotate(360deg) contrast(1);
+  }
+}
+
+@keyframes data-stream-enhanced {
+  0% {
+    transform: translateX(-100%) scaleX(0);
+    opacity: 0;
+  }
+  25% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(50%) scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) scaleX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes quantum-spin-enhanced {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  20% {
+    transform: rotateX(72deg) rotateY(36deg) rotateZ(18deg) scale(1.05);
+  }
+  40% {
+    transform: rotateX(144deg) rotateY(72deg) rotateZ(36deg) scale(0.95);
+  }
+  60% {
+    transform: rotateX(216deg) rotateY(108deg) rotateZ(54deg) scale(1.1);
+  }
+  80% {
+    transform: rotateX(288deg) rotateY(144deg) rotateZ(72deg) scale(0.9);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg) scale(1);
+  }
+}
+
+@keyframes pulse-glow-enhanced {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(16, 185, 129, 0.6),
+      0 0 40px rgba(16, 185, 129, 0.4),
+      0 0 60px rgba(16, 185, 129, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(16, 185, 129, 1),
+      0 0 80px rgba(16, 185, 129, 0.8),
+      0 0 120px rgba(16, 185, 129, 0.6);
+    transform: scale(1.05);
   }
 }
 
