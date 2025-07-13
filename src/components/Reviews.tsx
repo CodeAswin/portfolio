@@ -180,17 +180,6 @@ const Reviews = () => {
               </div>
             ))}
         </div>
-
-        {/* Portfolio Summary */}
-        <div className="text-center animate-fade-in animation-delay-1000">
-          <div className="bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-3xl p-16 border border-slate-600/30 max-w-4xl mx-auto shadow-2xl">
-            <Award className="w-20 h-20 text-cyan-400 mx-auto mb-8" />
-            <h3 className="text-5xl font-bold text-slate-100 mb-8">Professional Creative Services</h3>
-            <p className="text-slate-300 text-xl leading-relaxed max-w-2xl mx-auto">
-              Delivering high-quality 3D art, engaging thumbnails, and professional video editing that helps creators stand out and achieve better results
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );

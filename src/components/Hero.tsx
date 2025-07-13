@@ -30,11 +30,6 @@ const Hero = () => {
       
       <div className="relative z-10 text-center px-6 max-w-7xl mx-auto">
         {/* Status Badge */}
-        <div className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-full border border-slate-600/30 mb-12 animate-fade-in shadow-2xl">
-          <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full animate-pulse shadow-lg shadow-emerald-500/50"></div>
-          <span className="text-slate-200 font-semibold text-lg">Available for Projects</span>
-        </div>
-        
         {/* Main Heading with 3D effect */}
         <div className="mb-8 animate-fade-in animation-delay-300">
           <h1 className="text-8xl md:text-9xl lg:text-[12rem] font-black mb-4 leading-none">
