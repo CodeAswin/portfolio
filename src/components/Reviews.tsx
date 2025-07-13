@@ -112,18 +112,18 @@ const Reviews = () => {
             </div>
             
             <div className="group flex items-center gap-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl px-10 py-8 border border-slate-600/30 hover:border-emerald-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
-              <Users className="w-10 h-10 text-emerald-400 group-hover:rotate-12 transition-transform" />
+              <MessageSquare className="w-10 h-10 text-emerald-400 group-hover:rotate-12 transition-transform" />
               <div className="text-left">
-                <div className="text-slate-100 font-bold text-3xl">100%</div>
-                <div className="text-slate-400 text-sm font-medium">Satisfaction</div>
+                <div className="text-slate-100 font-bold text-3xl">Happy</div>
+                <div className="text-slate-400 text-sm font-medium">Clients</div>
               </div>
             </div>
             
             <div className="group flex items-center gap-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl px-10 py-8 border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
-              <TrendingUp className="w-10 h-10 text-cyan-400 group-hover:rotate-12 transition-transform" />
+              <Award className="w-10 h-10 text-cyan-400 group-hover:rotate-12 transition-transform" />
               <div className="text-left">
-                <div className="text-slate-100 font-bold text-3xl">+50%</div>
-                <div className="text-slate-400 text-sm font-medium">Performance Boost</div>
+                <div className="text-slate-100 font-bold text-3xl">Quality</div>
+                <div className="text-slate-400 text-sm font-medium">Work</div>
               </div>
             </div>
           </div>

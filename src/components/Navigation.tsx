@@ -91,12 +91,6 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className={`lg:hidden transition-all duration-500 overflow-hidden ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
-          <div className="py-6 space-y-2 bg-slate-900/95 backdrop-blur-xl rounded-2xl mt-4 border border-slate-700/50 shadow-2xl">
-            {navItems.map((item, index) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -110,13 +104,6 @@ const Navigation = () => {
               </a>
             ))}
             
-            {/* Mobile Status */}
-            <div className="mx-6 mt-4 pt-4 border-t border-slate-700/50">
-              <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-emerald-500/20 to-green-500/20 rounded-xl border border-emerald-500/30">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span className="text-emerald-300 font-medium text-sm">Available for Projects</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
