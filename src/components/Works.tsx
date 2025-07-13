@@ -1,26 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useModalStore } from '../store/modalStore';
-import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Plus, X } from 'lucide-react';
-
-interface WorkItem {
-  id: number;
-  type: '3d' | 'thumbnail' | 'video';
-  title: string;
-  category: string;
-  url: string;
-  thumbnailUrl?: string;
-}
+import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award } from 'lucide-react';
+import { portfolioItems, getYouTubeVideoId, getYouTubeThumbnail } from '../data/portfolioData';
 
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
   const [scrollY, setScrollY] = useState(0);
-  const [works, setWorks] = useState<WorkItem[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const [newWork, setNewWork] = useState({
-    title: '',
-    url: '',
-    category: ''
-  });
   const { openModal } = useModalStore();
 
   useEffect(() => {
@@ -30,56 +15,64 @@ const Works = () => {
   }, []);
 
   const tabs = [
-    { id: '3d', label: '3D Art', icon: Cube, color: 'from-cyan-500 to-blue-500' },
-    { id: 'thumbnails', label: 'Thumbnails', icon: Image, color: 'from-purple-500 to-pink-500' },
-    { id: 'videos', label: 'Videos', icon: Video, color: 'from-emerald-500 to-teal-500' }
+    { id: '3d', label: '3D Art', icon: Cube, color: 'from-cyan-500 to-blue-500', accent: 'cyan' },
+    { id: 'thumbnails', label: 'Thumbnails', icon: Image, color: 'from-purple-500 to-pink-500', accent: 'purple' },
+    { id: 'videos', label: 'Videos', icon: Video, color: 'from-emerald-500 to-teal-500', accent: 'emerald' }
   ];
 
-  const getYouTubeVideoId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
-  };
-
-  const getThumbnailContent = (item: WorkItem) => {
-    if (item.type !== 'video') {
-      return <img src={item.url} alt={item.title} className="w-full h-full object-cover" />;
+  const getThumbnailContent = (item: any) => {
+    if (item.isYouTubeVideo && item.type === 'video') {
+      const thumbnail = getYouTubeThumbnail(item.url);
+      if (thumbnail) {
+        return <img src={thumbnail} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />;
+      }
     }
     
-    const youtubeId = getYouTubeVideoId(item.url);
-    if (youtubeId) {
-      return <img src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`} alt={item.title} className="w-full h-full object-cover" />;
+    if (item.type === 'video' && !item.isYouTubeVideo) {
+      return <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />;
     }
     
-    return <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
-      <Video className="w-16 h-16 text-emerald-400" />
-    </div>;
+    return <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />;
   };
 
-  const handleAddWork = () => {
-    if (newWork.title && newWork.url && newWork.category) {
-      const workItem: WorkItem = {
-        id: Date.now(),
-        type: activeTab === '3d' ? '3d' : activeTab === 'thumbnails' ? 'thumbnail' : 'video',
-        title: newWork.title,
-        category: newWork.category,
-        url: newWork.url
-      };
-      
-      setWorks([...works, workItem]);
-      setNewWork({ title: '', url: '', category: '' });
-      setIsAdding(false);
+  const getOverlayIcon = (item: any) => {
+    if (item.type === 'video') {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-24 h-24 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-pulse-glow">
+            <Play className="w-12 h-12 text-white ml-1" />
+          </div>
+        </div>
+      );
+    }
+    
+    if (item.type === '3d') {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="w-24 h-24 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-rotate-3d">
+            <Cube className="w-12 h-12 text-white" />
+          </div>
+        </div>
+      );
+    }
+    
+    if (item.type === 'thumbnail') {
+      return (
+        <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="w-14 h-14 bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-md rounded-full flex items-center justify-center animate-heartbeat">
+            <Eye className="w-7 h-7 text-white" />
+          </div>
+        </div>
+      );
     }
   };
 
-  const handleRemoveWork = (id: number) => {
-    setWorks(works.filter(work => work.id !== id));
-  };
-
-  const filteredWorks = works.filter(item => 
-    (activeTab === '3d' && item.type === '3d') ||
-    (activeTab === 'thumbnails' && item.type === 'thumbnail') ||
-    (activeTab === 'videos' && item.type === 'video')
+  const filteredWorks = portfolioItems.filter(item => 
+    item.enabled && (
+      (activeTab === '3d' && item.type === '3d') ||
+      (activeTab === 'thumbnails' && item.type === 'thumbnail') ||
+      (activeTab === 'videos' && item.type === 'video')
+    )
   );
 
   return (
@@ -88,32 +81,32 @@ const Works = () => {
       <div className="absolute inset-0">
         {/* Multiple floating 3D shapes with enhanced animations */}
         <div 
-          className="absolute top-32 left-20 w-40 h-40 bg-gradient-to-br from-cyan-400/10 to-blue-500/10 rounded-3xl transform rotate-45 shadow-2xl shadow-cyan-500/5 animate-float-3d"
+          className="absolute top-32 left-20 w-40 h-40 bg-gradient-to-br from-cyan-400/15 to-blue-500/15 rounded-3xl transform rotate-45 shadow-2xl shadow-cyan-500/10 animate-float-3d"
           style={{
             transform: `translateY(${scrollY * 0.1}px) rotate(${45 + scrollY * 0.05}deg) scale(${1 + Math.sin(scrollY * 0.01) * 0.1})`,
           }}
         ></div>
         <div 
-          className="absolute top-64 right-32 w-32 h-32 bg-gradient-to-br from-purple-400/10 to-pink-500/10 rounded-2xl transform -rotate-12 shadow-2xl shadow-purple-500/5 animate-bounce-3d"
+          className="absolute top-64 right-32 w-32 h-32 bg-gradient-to-br from-purple-400/15 to-pink-500/15 rounded-2xl transform -rotate-12 shadow-2xl shadow-purple-500/10 animate-bounce-3d"
           style={{
             transform: `translateY(${scrollY * -0.08}px) rotate(${-12 - scrollY * 0.03}deg) scale(${1 + Math.cos(scrollY * 0.008) * 0.15})`,
           }}
         ></div>
         <div 
-          className="absolute bottom-40 left-40 w-48 h-48 bg-gradient-to-br from-emerald-400/10 to-teal-500/10 rounded-full shadow-2xl shadow-emerald-500/5 animate-pulse-3d"
+          className="absolute bottom-40 left-40 w-48 h-48 bg-gradient-to-br from-emerald-400/15 to-teal-500/15 rounded-full shadow-2xl shadow-emerald-500/10 animate-pulse-3d"
           style={{
             transform: `translateY(${scrollY * 0.06}px) scale(${1 + scrollY * 0.0001}) rotate(${scrollY * 0.02}deg)`,
           }}
         ></div>
         <div 
-          className="absolute top-1/2 right-1/4 w-36 h-36 bg-gradient-to-br from-orange-400/10 to-red-500/10 rounded-2xl shadow-2xl shadow-orange-500/5 animate-wiggle-3d"
+          className="absolute top-1/2 right-1/4 w-36 h-36 bg-gradient-to-br from-orange-400/15 to-red-500/15 rounded-2xl shadow-2xl shadow-orange-500/10 animate-wiggle-3d"
           style={{
             transform: `translateY(${scrollY * 0.09}px) rotate(${30 + scrollY * -0.04}deg)`,
           }}
         ></div>
         
         {/* Enhanced 3D Grid Pattern with depth */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
+        <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `
             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
             linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -134,7 +127,7 @@ const Works = () => {
       <div className="container mx-auto px-6 relative z-10">
         {/* Enhanced Section Header */}
         <div className="text-center mb-24 animate-fade-in">
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-full border border-slate-600/30 mb-12 shadow-2xl animate-shimmer">
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-slate-800/60 to-slate-700/60 backdrop-blur-xl rounded-full border border-slate-600/40 mb-12 shadow-2xl animate-shimmer">
             <Layers className="w-6 h-6 text-cyan-400 animate-spin-slow" />
             <span className="text-cyan-400 font-semibold text-lg animate-text-glow">Featured Portfolio</span>
           </div>
@@ -172,138 +165,25 @@ const Works = () => {
           ))}
         </div>
 
-        {/* Add Work Button */}
-        <div className="flex justify-center mb-12 animate-fade-in animation-delay-700">
-          <button
-            onClick={() => setIsAdding(true)}
-            className="group flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl text-white font-bold text-lg transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/25 animate-glow-pulse"
-          >
-            <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500" />
-            Add {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnail' : 'Video'}
-          </button>
-        </div>
-
-        {/* Add Work Form */}
-        {isAdding && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-600/30 max-w-md w-full shadow-2xl animate-scale-in">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-slate-100">Add New {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnail' : 'Video'}</h3>
-                <button
-                  onClick={() => setIsAdding(false)}
-                  className="text-slate-400 hover:text-slate-200 transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">Title</label>
-                  <input
-                    type="text"
-                    value={newWork.title}
-                    onChange={(e) => setNewWork({...newWork, title: e.target.value})}
-                    placeholder="Enter work title"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/30 rounded-xl text-slate-100 placeholder-slate-400 focus:border-cyan-500/50 focus:outline-none transition-colors"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">
-                    {activeTab === 'videos' ? 'Video URL (YouTube)' : 'Image URL'}
-                  </label>
-                  <input
-                    type="url"
-                    value={newWork.url}
-                    onChange={(e) => setNewWork({...newWork, url: e.target.value})}
-                    placeholder={activeTab === 'videos' ? 'https://youtube.com/watch?v=...' : 'https://example.com/image.jpg'}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/30 rounded-xl text-slate-100 placeholder-slate-400 focus:border-cyan-500/50 focus:outline-none transition-colors"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">Category</label>
-                  <input
-                    type="text"
-                    value={newWork.category}
-                    onChange={(e) => setNewWork({...newWork, category: e.target.value})}
-                    placeholder="e.g., Gaming, Product Design, Music Video"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/30 rounded-xl text-slate-100 placeholder-slate-400 focus:border-cyan-500/50 focus:outline-none transition-colors"
-                  />
-                </div>
-              </div>
-              
-              <div className="flex gap-4 mt-8">
-                <button
-                  onClick={() => setIsAdding(false)}
-                  className="flex-1 px-6 py-3 bg-slate-600/50 text-slate-300 rounded-xl font-medium hover:bg-slate-600/70 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddWork}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-xl font-medium hover:shadow-lg transition-all"
-                >
-                  Add Work
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Works Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-3xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/30 to-slate-700/30 backdrop-blur-xl border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 animate-float-card"
+              className="group relative overflow-hidden rounded-3xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 animate-float-card"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => openModal({
-                type: item.type === '3d' ? 'thumbnail' : item.type,
+                type: item.isYouTubeVideo ? 'video' : 'thumbnail',
                 url: item.url,
                 title: item.title,
               })}
             >
-              {/* Remove button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleRemoveWork(item.id);
-                }}
-                className="absolute top-4 right-4 z-10 w-8 h-8 bg-red-500/80 hover:bg-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
               <div className="aspect-video w-full overflow-hidden rounded-t-3xl relative">
                 {getThumbnailContent(item)}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
-                {item.type === 'video' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-24 h-24 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-pulse-glow">
-                      <Play className="w-12 h-12 text-white ml-1" />
-                    </div>
-                  </div>
-                )}
-                
-                {item.type === '3d' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-rotate-3d">
-                      <Cube className="w-12 h-12 text-white" />
-                    </div>
-                  </div>
-                )}
-                
-                {item.type === 'thumbnail' && (
-                  <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-14 h-14 bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-md rounded-full flex items-center justify-center animate-heartbeat">
-                      <Eye className="w-7 h-7 text-white" />
-                    </div>
-                  </div>
-                )}
+                {getOverlayIcon(item)}
               </div>
               
               <div className="p-8">
@@ -334,12 +214,33 @@ const Works = () => {
             <div className="w-32 h-32 mx-auto mb-12 bg-gradient-to-r from-slate-700/50 to-slate-600/50 rounded-full flex items-center justify-center backdrop-blur-xl border border-slate-600/30 shadow-2xl animate-float-up-down">
               <Palette className="w-16 h-16 text-slate-400 animate-wiggle" />
             </div>
-            <h3 className="text-5xl font-bold text-slate-200 mb-8 animate-text-glow">Add Your First {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnail' : 'Video'}</h3>
+            <h3 className="text-5xl font-bold text-slate-200 mb-8 animate-text-glow">No {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnails' : 'Videos'} Yet</h3>
             <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed animate-shimmer">
-              Click the "Add {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnail' : 'Video'}" button above to showcase your amazing {activeTab} work!
+              Check back soon for amazing {activeTab} work!
             </p>
           </div>
         )}
+
+        {/* Stats Section */}
+        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-10 animate-fade-in animation-delay-1000">
+          <div className="group bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-2xl p-10 border border-slate-600/40 text-center hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:rotate-1 shadow-xl animate-bounce-3d">
+            <Sparkles className="w-20 h-20 text-cyan-400 mx-auto mb-8 group-hover:rotate-12 transition-transform animate-glow" />
+            <h4 className="text-slate-100 font-bold text-2xl mb-6 animate-fade-in">Creative Excellence</h4>
+            <p className="text-slate-300 text-lg leading-relaxed animate-shimmer">Innovative designs that capture attention and drive engagement across all platforms</p>
+          </div>
+          
+          <div className="group bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-2xl p-10 border border-slate-600/40 text-center hover:border-emerald-500/60 transition-all duration-700 transform hover:scale-105 shadow-xl animate-bounce-3d animation-delay-300">
+            <Zap className="w-20 h-20 text-emerald-400 mx-auto mb-8 group-hover:rotate-12 transition-transform animate-glow" />
+            <h4 className="text-slate-100 font-bold text-2xl mb-6 animate-fade-in">Fast Delivery</h4>
+            <p className="text-slate-300 text-lg leading-relaxed animate-shimmer">Quick turnaround times without compromising on quality or attention to detail</p>
+          </div>
+          
+          <div className="group bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-2xl p-10 border border-slate-600/40 text-center hover:border-purple-500/60 transition-all duration-700 transform hover:scale-105 hover:-rotate-1 shadow-xl animate-bounce-3d animation-delay-600">
+            <Award className="w-20 h-20 text-purple-400 mx-auto mb-8 group-hover:rotate-12 transition-transform animate-glow" />
+            <h4 className="text-slate-100 font-bold text-2xl mb-6 animate-fade-in">Professional Quality</h4>
+            <p className="text-slate-300 text-lg leading-relaxed animate-shimmer">Industry-standard work that meets the highest professional expectations</p>
+          </div>
+        </div>
       </div>
     </section>
   );

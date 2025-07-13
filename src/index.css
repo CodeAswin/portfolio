@@ -275,6 +275,30 @@
   animation: wiggle-3d 6s ease-in-out infinite;
 }
 
+.animate-matrix-rain {
+  animation: matrix-rain 8s linear infinite;
+}
+
+.animate-neon-glow {
+  animation: neon-glow 2s ease-in-out infinite;
+}
+
+.animate-hologram {
+  animation: hologram 4s ease-in-out infinite;
+}
+
+.animate-cyber-glitch {
+  animation: cyber-glitch 3s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: data-stream 6s ease-in-out infinite;
+}
+
+.animate-quantum-spin {
+  animation: quantum-spin 10s linear infinite;
+}
+
 @keyframes scale-bounce {
   0%, 100% {
     transform: scale(1);
@@ -374,6 +398,114 @@
   }
   75% {
     transform: rotate(-2deg) scale(0.98);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes neon-glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor,
+      0 0 20px currentColor;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      0 0 40px currentColor;
+  }
+}
+
+@keyframes hologram {
+  0%, 100% {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translateZ(10px);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateZ(-5px);
+  }
+  75% {
+    opacity: 0.7;
+    transform: translateZ(15px);
+  }
+}
+
+@keyframes cyber-glitch {
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  10% {
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(90deg);
+  }
+  20% {
+    transform: translate(-2px, -2px);
+    filter: hue-rotate(180deg);
+  }
+  30% {
+    transform: translate(2px, 2px);
+    filter: hue-rotate(270deg);
+  }
+  40% {
+    transform: translate(2px, -2px);
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes data-stream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes quantum-spin {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  25% {
+    transform: rotateX(90deg) rotateY(45deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg);
+  }
+  75% {
+    transform: rotateX(270deg) rotateY(135deg) rotateZ(90deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(180deg) rotateZ(135deg);
   }
 }
 
