@@ -25,12 +25,17 @@ const Works = () => {
 
   const handleItemClick = (item: any) => {
     if (item.isYouTubeVideo) {
+      // Open YouTube videos in new tab
+      window.open(item.url, '_blank', 'noopener,noreferrer');
+    } else if (item.type === 'video' && !item.isYouTubeVideo) {
+      // Open modal for non-YouTube videos
       setModalContent({
         type: 'video',
         url: item.url,
-        isYouTube: true
+        isYouTube: false
       });
     } else {
+      // Open modal for images
       setModalContent({
         type: 'image',
         url: item.url
@@ -190,7 +195,7 @@ const Works = () => {
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
-              <div className="w-full aspect-video overflow-hidden rounded-t-2xl relative">
+              <div className="w-full aspect-[4/3] overflow-hidden rounded-t-2xl relative">
                 {getThumbnailContent(item)}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-hologram-enhanced"></div>
@@ -248,14 +253,16 @@ const Works = () => {
             </button>
             
             <div className="w-full h-full">
-              {modalContent.type === 'video' && modalContent.isYouTube ? (
-                <div className="relative w-full h-0 pb-[56.25%]">
-                  <iframe
-                    src={getYouTubeEmbedUrl(modalContent.url)}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+              {modalContent.type === 'video' && !modalContent.isYouTube ? (
+                <div className="flex items-center justify-center min-h-[60vh] p-8">
+                  <video
+                    src={modalContent.url}
+                    controls
+                    autoPlay
+                    className="max-w-full max-h-full rounded-lg shadow-2xl"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               ) : (
                 <div className="flex items-center justify-center min-h-[60vh] p-8">
