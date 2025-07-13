@@ -18,8 +18,8 @@ export const portfolioItems: WorkItem[] = [
     type: '3d',
     title: 'Futuristic Robot Design',
     category: 'Character Design',
-    url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=600&fit=crop',
-    isYouTubeVideo: false,
+    url: 'https://www.youtube.com/shorts/YflVlHYY-uQ',
+    isYouTubeVideo: true,
     enabled: true
   },
   {
