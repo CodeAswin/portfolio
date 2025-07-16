@@ -178,34 +178,6 @@ const Works = () => {
           <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed animate-hologram-enhanced">
             Showcasing expertise in 3D artistry, thumbnail design, and video editing
           </p>
-
-          {/* File Management Instructions */}
-          <div className="mt-12 max-w-4xl mx-auto bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl rounded-2xl p-8 border border-slate-600/40 animate-fade-in animation-delay-500">
-            <div className="flex items-center gap-4 mb-6">
-              <FolderOpen className="w-8 h-8 text-emerald-400 animate-bounce-3d" />
-              <h3 className="text-2xl font-bold text-slate-100">Easy File Management</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="bg-slate-700/30 rounded-xl p-6 border border-cyan-500/30">
-                <Cube className="w-8 h-8 text-cyan-400 mb-3" />
-                <h4 className="text-slate-100 font-semibold mb-2">3D Art</h4>
-                <p className="text-slate-300 text-sm">Drop files in <code className="bg-slate-800 px-2 py-1 rounded">/public/portfolio/3d-art/</code></p>
-              </div>
-              <div className="bg-slate-700/30 rounded-xl p-6 border border-purple-500/30">
-                <Image className="w-8 h-8 text-purple-400 mb-3" />
-                <h4 className="text-slate-100 font-semibold mb-2">Thumbnails</h4>
-                <p className="text-slate-300 text-sm">Drop files in <code className="bg-slate-800 px-2 py-1 rounded">/public/portfolio/thumbnails/</code></p>
-              </div>
-              <div className="bg-slate-700/30 rounded-xl p-6 border border-emerald-500/30">
-                <Video className="w-8 h-8 text-emerald-400 mb-3" />
-                <h4 className="text-slate-100 font-semibold mb-2">Videos</h4>
-                <p className="text-slate-300 text-sm">Drop files in <code className="bg-slate-800 px-2 py-1 rounded">/public/portfolio/videos/</code></p>
-              </div>
-            </div>
-            <p className="text-slate-400 text-center mt-6">
-              Files are automatically detected and displayed in the correct section!
-            </p>
-          </div>
         </div>
 
         {/* Enhanced Tab Navigation */}
