@@ -1,72 +1,65 @@
-// Portfolio data - Edit this file to add/remove work items
-// Only developers can edit this - not visible on website
+// Portfolio data - Now supports both manual entries and automatic file scanning
+import { fileScanner } from '../utils/fileScanner';
 
 export interface WorkItem {
   id: number;
   type: '3d' | 'thumbnail' | 'video';
   url: string;
-  isYouTubeVideo: boolean; // Set to true if it's a YouTube video
-  enabled: boolean; // Set to false to hide from website
+  isYouTubeVideo: boolean;
+  enabled: boolean;
+  name?: string;
+  isLocalFile?: boolean;
 }
 
-export const portfolioItems: WorkItem[] = [
-  // 3D Art Examples
+// Manual portfolio items (YouTube videos, external URLs, etc.)
+export const manualPortfolioItems: WorkItem[] = [
+  // YouTube videos and external content
   {
     id: 1,
     type: '3d',
     url: 'https://www.youtube.com/shorts/YflVlHYY-uQ',
     isYouTubeVideo: true,
-    enabled: true
+    enabled: true,
+    name: '3D Animation Short'
   },
   {
     id: 2,
-    type: '3d',
-    url: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-
-  // Thumbnail Examples
-  {
-    id: 3,
-    type: 'thumbnail',
-    url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=450&fit=crop',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-  {
-    id: 4,
-    type: 'thumbnail',
-    url: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=450&fit=crop',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-
-  // Video Examples
-  {
-    id: 5,
     type: 'video',
     url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     isYouTubeVideo: true,
-    enabled: true
+    enabled: true,
+    name: 'Sample Video'
   },
-  {
-    id: 6,
-    type: 'video',
-    url: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=450&fit=crop',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-
-  // Add more items here following the same format
-  // To add new work:
-  // 1. Copy an existing item
-  // 2. Change the id to a unique number
-  // 3. Set type to '3d', 'thumbnail', or 'video'
-  // 4. Add your image/video URL
-  // 5. Set isYouTubeVideo to true if it's a YouTube video
-  // 6. Set enabled to true to show on website
+  // Add more manual items here
 ];
+
+// Function to get all portfolio items (manual + scanned files)
+export const getPortfolioItems = async (): Promise<WorkItem[]> => {
+  try {
+    // Get manually added items
+    const manualItems = manualPortfolioItems.filter(item => item.enabled);
+    
+    // Scan folders for local files
+    const scannedFiles = await fileScanner.scanPortfolioFolders();
+    
+    // Convert scanned files to WorkItem format
+    const fileItems: WorkItem[] = scannedFiles.map((file, index) => ({
+      id: 1000 + index, // Use high IDs to avoid conflicts
+      type: file.type,
+      url: file.url,
+      isYouTubeVideo: false,
+      enabled: true,
+      name: file.name,
+      isLocalFile: true
+    }));
+    
+    // Combine manual and file items
+    return [...manualItems, ...fileItems];
+  } catch (error) {
+    console.error('Error loading portfolio items:', error);
+    return manualPortfolioItems.filter(item => item.enabled);
+  }
+};
 
 // Helper function to get YouTube video ID
 export const getYouTubeVideoId = (url: string): string | null => {
@@ -79,4 +72,11 @@ export const getYouTubeVideoId = (url: string): string | null => {
 export const getYouTubeThumbnail = (url: string): string | null => {
   const videoId = getYouTubeVideoId(url);
   return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+};
+
+// Function to add files programmatically (for easy management)
+export const addPortfolioFile = (fileName: string, folderName: '3d-art' | 'thumbnails' | 'videos') => {
+  const fileEntry = fileScanner.createFileEntry(fileName, folderName);
+  console.log(`Added file: ${fileName} to ${folderName} section`);
+  return fileEntry;
 };
