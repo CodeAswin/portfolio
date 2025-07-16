@@ -34,7 +34,11 @@ const Navigation = () => {
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 p-0.5 shadow-2xl">
                 <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center overflow-hidden">
                   <img
+<<<<<<< HEAD
                     src="https://cdn.discordapp.com/attachments/1261514475685675039/1362683857748492379/websitepfp.png?ex=680349bd&is=6801f83d&hm=35f3c74e8286f4ddbbbe31a4332f5d736193e2ffb458dc6fd55ca1548fa401bb&=80&w=100"
+=======
+                    src="https://media.discordapp.net/attachments/1252290999363960897/1395034472059240498/Clear_style_Edited.png?ex=6878fa98&is=6877a918&hm=2f9d60fbe24f509848740ce17faa08164e5d4e75174df2345487831c0ebd6fd2&=&format=webp&quality=lossless&width=925&height=925"
+>>>>>>> e6a653e (Initial commit)
                     alt="Aswin"
                     className="w-full h-full object-cover rounded-xl group-hover:scale-110 transition-transform duration-500"
                   />
@@ -44,7 +48,11 @@ const Navigation = () => {
             </div>
             
             <div className="hidden md:block animate-fade-in animation-delay-300">
+<<<<<<< HEAD
               <div className="text-slate-100 font-bold text-xl tracking-tight">ASWIN</div>
+=======
+              <div className="text-slate-100 font-bold text-xl tracking-tight">Aswin</div>
+>>>>>>> e6a653e (Initial commit)
               <div className="text-slate-400 text-sm font-medium">Creative Designer</div>
             </div>
           </div>
