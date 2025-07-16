@@ -26,7 +26,7 @@ const Reviews = () => {
       name: "Toxic Decit",
       rating: 5,
 <<<<<<< HEAD
-      comment: "Outstanding work quality and professional service. The thumbnails significantly boosted our channel's performance!",
+      comment: "asasasa!",
       project: 'Thumbnail Design',
       enabled: true,
       image: "https://cdn.discordapp.com/attachments/1185125884789800960/1362460961113505893/IMG_1309.webp?ex=68027a26&is=680128a6&hm=5c8cc7ba42e3ddd0f02403032dbe1b86617e8e3178b7ff1302bf1e202141ebde&=100&h=100&fit=crop"
