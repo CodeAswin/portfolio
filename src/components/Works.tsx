@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload, FolderOpen } from 'lucide-react';
-import { getPortfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem } from '../data/portfolioData';
+import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
+import { portfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem } from '../data/portfolioData';
 
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
   const [scrollY, setScrollY] = useState(0);
-  const [portfolioItems, setPortfolioItems] = useState<WorkItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalContent, setModalContent] = useState<{
     type: 'image' | 'video';
     url: string;
@@ -18,27 +16,6 @@ const Works = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    loadPortfolioItems();
-    
-    // Set up auto-refresh to check for new files
-    const interval = setInterval(loadPortfolioItems, 10000); // Check every 10 seconds
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadPortfolioItems = async () => {
-    setLoading(true);
-    try {
-      const items = await getPortfolioItems();
-      setPortfolioItems(items);
-    } catch (error) {
-      console.error('Error loading portfolio items:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const tabs = [
     { id: '3d', label: '3D Art', icon: Cube, color: 'from-cyan-500 to-blue-500', accent: 'cyan' },
@@ -204,65 +181,48 @@ const Works = () => {
           ))}
         </div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-20 animate-fade-in">
-            <div className="w-16 h-16 mx-auto mb-8 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
-            <p className="text-slate-300 text-xl">Loading portfolio items...</p>
-          </div>
-        )}
-
         {/* Works Grid */}
-        {!loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {filteredWorks.map((item, index) => (
-              <div
-                key={item.id}
-                className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 animate-quantum-spin-enhanced"
-                style={{ animationDelay: `${index * 200}ms` }}
-                onClick={() => handleItemClick(item)}
-              >
-                <div className="w-full aspect-[4/3] overflow-hidden rounded-t-2xl relative">
-                  {getThumbnailContent(item)}
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-hologram-enhanced"></div>
-                  
-                  {getOverlayIcon(item)}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {filteredWorks.map((item, index) => (
+            <div
+              key={item.id}
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 animate-quantum-spin-enhanced"
+              style={{ animationDelay: `${index * 200}ms` }}
+              onClick={() => handleItemClick(item)}
+            >
+              <div className="w-full aspect-[4/3] overflow-hidden rounded-t-2xl relative">
+                {getThumbnailContent(item)}
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-hologram-enhanced"></div>
+                
+                {getOverlayIcon(item)}
 
-                  {/* File type indicator */}
-                  {item.isLocalFile && (
-                    <div className="absolute top-4 left-4 px-3 py-1 bg-emerald-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold">
-                      Local File
-                    </div>
-                  )}
-                </div>
-
-                {/* Item name */}
-                {item.name && (
-                  <div className="p-4">
-                    <h3 className="text-slate-200 font-medium text-sm truncate">{item.name}</h3>
+                {/* YouTube indicator */}
+                {item.isYouTubeVideo && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold">
+                    YouTube
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        )}
+
+              {/* Item name */}
+              <div className="p-4">
+                <h3 className="text-slate-200 font-medium text-sm truncate">{item.name}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Empty State */}
-        {!loading && filteredWorks.length === 0 && (
+        {filteredWorks.length === 0 && (
           <div className="text-center py-32 animate-fade-in">
             <div className="w-32 h-32 mx-auto mb-12 bg-gradient-to-r from-slate-700/50 to-slate-600/50 rounded-full flex items-center justify-center backdrop-blur-xl border border-slate-600/30 shadow-2xl animate-quantum-spin-enhanced">
               <Upload className="w-16 h-16 text-slate-400 animate-hologram-enhanced" />
             </div>
             <h3 className="text-5xl font-bold text-slate-200 mb-8 animate-neon-glow-enhanced">No {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnails' : 'Videos'} Yet</h3>
             <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed animate-data-stream-enhanced mb-8">
-              Add your {activeTab} files to the <code className="bg-slate-800 px-2 py-1 rounded">/public/portfolio/{activeTab === '3d' ? '3d-art' : activeTab}/ </code> folder and they'll appear here automatically!
+              Add your {activeTab} items to the portfolio by editing the portfolioData.ts file
             </p>
-            <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 max-w-md mx-auto border border-slate-600/30">
-              <p className="text-slate-300 text-sm">
-                Supported formats: JPG, PNG, GIF, WebP, MP4, WebM, MOV
-              </p>
-            </div>
           </div>
         )}
 

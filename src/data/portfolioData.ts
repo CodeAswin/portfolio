@@ -1,65 +1,55 @@
-// Portfolio data - Now supports both manual entries and automatic file scanning
-import { fileScanner } from '../utils/fileScanner';
-
+// Portfolio data - Simple file management system
 export interface WorkItem {
   id: number;
   type: '3d' | 'thumbnail' | 'video';
   url: string;
+  name: string;
   isYouTubeVideo: boolean;
   enabled: boolean;
-  name?: string;
-  isLocalFile?: boolean;
 }
 
-// Manual portfolio items (YouTube videos, external URLs, etc.)
-export const manualPortfolioItems: WorkItem[] = [
-  // YouTube videos and external content
+// Add your portfolio items here
+export const portfolioItems: WorkItem[] = [
+  // 3D Art Examples (replace with your files)
   {
     id: 1,
     type: '3d',
-    url: 'https://www.youtube.com/shorts/YflVlHYY-uQ',
-    isYouTubeVideo: true,
-    enabled: true,
-    name: '3D Animation Short'
+    url: '/portfolio/3d-art/example-3d.jpg', // Replace with your actual file
+    name: '3D Artwork 1',
+    isYouTubeVideo: false,
+    enabled: false // Set to true when you add your file
   },
+  
+  // Thumbnail Examples (replace with your files)
   {
     id: 2,
-    type: 'video',
-    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    isYouTubeVideo: true,
-    enabled: true,
-    name: 'Sample Video'
+    type: 'thumbnail',
+    url: '/portfolio/thumbnails/example-thumb.jpg', // Replace with your actual file
+    name: 'Thumbnail Design 1',
+    isYouTubeVideo: false,
+    enabled: false // Set to true when you add your file
   },
-  // Add more manual items here
-];
-
-// Function to get all portfolio items (manual + scanned files)
-export const getPortfolioItems = async (): Promise<WorkItem[]> => {
-  try {
-    // Get manually added items
-    const manualItems = manualPortfolioItems.filter(item => item.enabled);
-    
-    // Scan folders for local files
-    const scannedFiles = await fileScanner.scanPortfolioFolders();
-    
-    // Convert scanned files to WorkItem format
-    const fileItems: WorkItem[] = scannedFiles.map((file, index) => ({
-      id: 1000 + index, // Use high IDs to avoid conflicts
-      type: file.type,
-      url: file.url,
-      isYouTubeVideo: false,
-      enabled: true,
-      name: file.name,
-      isLocalFile: true
-    }));
-    
-    // Combine manual and file items
-    return [...manualItems, ...fileItems];
-  } catch (error) {
-    console.error('Error loading portfolio items:', error);
-    return manualPortfolioItems.filter(item => item.enabled);
+  
+  // Video Examples (replace with your files)
+  {
+    id: 3,
+    type: 'video',
+    url: '/portfolio/videos/example-video.mp4', // Replace with your actual file
+    name: 'Video Edit 1',
+    isYouTubeVideo: false,
+    enabled: false // Set to true when you add your file
+  },
+  
+  // YouTube Video Example
+  {
+    id: 4,
+    type: '3d',
+    url: 'https://www.youtube.com/shorts/YflVlHYY-uQ',
+    name: '3D Animation Short',
+    isYouTubeVideo: true,
+    enabled: true // This one is enabled as example
   }
-};
+];
 
 // Helper function to get YouTube video ID
 export const getYouTubeVideoId = (url: string): string | null => {
@@ -72,11 +62,4 @@ export const getYouTubeVideoId = (url: string): string | null => {
 export const getYouTubeThumbnail = (url: string): string | null => {
   const videoId = getYouTubeVideoId(url);
   return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
-};
-
-// Function to add files programmatically (for easy management)
-export const addPortfolioFile = (fileName: string, folderName: '3d-art' | 'thumbnails' | 'videos') => {
-  const fileEntry = fileScanner.createFileEntry(fileName, folderName);
-  console.log(`Added file: ${fileName} to ${folderName} section`);
-  return fileEntry;
 };
