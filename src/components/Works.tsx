@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
-import { portfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem } from '../data/portfolioData';
+import { portfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem, isVideoUrl } from '../data/portfolioData';
 
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
@@ -8,6 +8,7 @@ const Works = () => {
   const [modalContent, setModalContent] = useState<{
     type: 'image' | 'video';
     url: string;
+    title: string;
     isYouTube?: boolean;
   } | null>(null);
 
@@ -25,20 +26,22 @@ const Works = () => {
 
   const handleItemClick = (item: WorkItem) => {
     if (item.isYouTubeVideo) {
-      // Open YouTube videos in new tab
+      // For YouTube videos, open in new tab
       window.open(item.url, '_blank', 'noopener,noreferrer');
-    } else if (item.type === 'video' && !item.isYouTubeVideo) {
-      // Open modal for non-YouTube videos
+    } else if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
+      // For regular video files, open in modal
       setModalContent({
         type: 'video',
         url: item.url,
+        title: item.name,
         isYouTube: false
       });
     } else {
-      // Open modal for images
+      // For images, open in modal
       setModalContent({
         type: 'image',
-        url: item.url
+        url: item.url,
+        title: item.name
       });
     }
   };
@@ -51,11 +54,45 @@ const Works = () => {
     if (item.isYouTubeVideo) {
       const thumbnail = getYouTubeThumbnail(item.url);
       if (thumbnail) {
-        return <img src={thumbnail} alt="Video thumbnail" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />;
+        return (
+          <img 
+            src={thumbnail} 
+            alt={item.name} 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              // Fallback if YouTube thumbnail fails
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
+            }}
+          />
+        );
       }
     }
     
-    return <img src={item.url} alt={item.name || "Portfolio item"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />;
+    // For regular images and videos
+    if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
+      // For video files, show a video preview
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
+          <div className="text-center">
+            <Video className="w-16 h-16 text-slate-400 mx-auto mb-2" />
+            <span className="text-slate-300 text-sm">Video File</span>
+          </div>
+        </div>
+      );
+    }
+    
+    // For images
+    return (
+      <img 
+        src={item.url} 
+        alt={item.name} 
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        onError={(e) => {
+          // Fallback if image fails to load
+          e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
+        }}
+      />
+    );
   };
 
   const getOverlayIcon = (item: WorkItem) => {
@@ -71,7 +108,7 @@ const Works = () => {
     
     return (
       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="w-16 h-16 bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-quantum-spin">
+        <div className="w-16 h-16 bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl">
           <Eye className="w-8 h-8 text-white" />
         </div>
       </div>
@@ -186,21 +223,30 @@ const Works = () => {
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 animate-quantum-spin-enhanced"
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
               <div className="w-full aspect-[4/3] overflow-hidden rounded-t-2xl relative">
                 {getThumbnailContent(item)}
                 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-hologram-enhanced"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {getOverlayIcon(item)}
 
                 {/* YouTube indicator */}
                 {item.isYouTubeVideo && (
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold">
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
+                    <Play className="w-3 h-3" />
                     YouTube
+                  </div>
+                )}
+
+                {/* Video indicator for non-YouTube videos */}
+                {isVideoUrl(item.url) && !item.isYouTubeVideo && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
+                    <Video className="w-3 h-3" />
+                    Video
                   </div>
                 )}
               </div>
@@ -221,7 +267,7 @@ const Works = () => {
             </div>
             <h3 className="text-5xl font-bold text-slate-200 mb-8 animate-neon-glow-enhanced">No {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnails' : 'Videos'} Yet</h3>
             <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed animate-data-stream-enhanced mb-8">
-              Add your {activeTab} items to the portfolio by editing the portfolioData.ts file
+              Add your {activeTab} items to the portfolioData.ts file to display them here
             </p>
           </div>
         )}
@@ -275,11 +321,14 @@ const Works = () => {
                 <div className="flex items-center justify-center min-h-[60vh] p-8">
                   <img
                     src={modalContent.url}
-                    alt="Portfolio item"
+                    alt={modalContent.title}
                     className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                   />
                 </div>
               )}
+              <div className="p-6 border-t border-slate-600/30">
+                <h3 className="text-white font-medium text-lg">{modalContent.title}</h3>
+              </div>
             </div>
           </div>
         </div>
