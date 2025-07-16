@@ -34,11 +34,7 @@ const Hero = () => {
         <div className="mb-8 animate-fade-in animation-delay-300">
           <h1 className="text-8xl md:text-9xl lg:text-[12rem] font-black mb-4 leading-none">
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-300 to-slate-100 drop-shadow-2xl">
-<<<<<<< HEAD
-              ASWIN
-=======
               Aswin
->>>>>>> e6a653e (Initial commit)
             </span>
           </h1>
           <div className="flex flex-wrap justify-center gap-6 text-2xl md:text-3xl font-bold text-slate-300">
@@ -67,11 +63,7 @@ const Hero = () => {
         <p className="text-2xl md:text-3xl text-slate-300 font-light max-w-5xl mx-auto leading-relaxed mb-16 animate-fade-in animation-delay-900">
           Creating stunning <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-semibold">3D visuals</span>, 
           eye-catching <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 font-semibold">thumbnails</span>, 
-<<<<<<< HEAD
-          and engaging <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 font-semibold">video content</span> 
-=======
           and engaging <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 font-semibold">video content </span>
->>>>>>> e6a653e (Initial commit)
           that drives results
         </p>
         
