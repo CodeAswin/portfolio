@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload, FolderOpen } from 'lucide-react';
+import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
 import { getPortfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem } from '../data/portfolioData';
 
 const Works = () => {
