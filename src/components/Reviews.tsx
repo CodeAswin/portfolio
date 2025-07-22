@@ -94,7 +94,7 @@ const Reviews = () => {
           </div>
           
           <h2 className="text-6xl font-bold text-slate-100 mb-8 animate-neon-glow-enhanced">
-            Client Testimonials
+            Client Reviews
           </h2>
           
           <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
