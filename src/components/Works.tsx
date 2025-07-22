@@ -77,7 +77,7 @@ const Works = () => {
       
       console.log('📁 Extracted file ID:', fileId);
       
-      if (fileIdMatch && fileIdMatch[1]) {
+      if (fileId) {
         // Try multiple Google Drive direct URL formats
         const directUrls = [
           `https://drive.google.com/uc?export=view&id=${fileId}`,
