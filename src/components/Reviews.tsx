@@ -25,17 +25,10 @@ const Reviews = () => {
       id: 1,
       name: "Toxic Decit",
       rating: 5,
-<<<<<<< HEAD
-      comment: "asasasa!",
-      project: 'Thumbnail Design',
-      enabled: true,
-      image: "https://cdn.discordapp.com/attachments/1185125884789800960/1362460961113505893/IMG_1309.webp?ex=68027a26&is=680128a6&hm=5c8cc7ba42e3ddd0f02403032dbe1b86617e8e3178b7ff1302bf1e202141ebde&=100&h=100&fit=crop"
-=======
       comment: "It was great for the price!",
       project: 'Thumbnail Design',
       enabled: true,
       image: "https://www.svgrepo.com/show/452030/avatar-default.svg"
->>>>>>> e6a653e (Initial commit)
     },
     {
       id: 2,
@@ -99,9 +92,6 @@ const Reviews = () => {
             <MessageSquare className="w-6 h-6 text-purple-400" />
 <<<<<<< HEAD
             <span className="text-purple-400 font-semibold text-lg">Client Testimonials</span>
-=======
-            <span className="text-purple-400 font-semibold text-lg">Client Reviews</span>
->>>>>>> e6a653e (Initial commit)
           </div>
           
           <h2 className="text-7xl md:text-8xl font-black text-slate-100 mb-8 tracking-tight">
@@ -109,11 +99,7 @@ const Reviews = () => {
           </h2>
           
           <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-<<<<<<< HEAD
-            Real feedback from creators who've achieved remarkable results with professional designs
-=======
            feedback from creators who've achieved remarkable results with professional designs
->>>>>>> e6a653e (Initial commit)
           </p>
           
           {/* Stats */}

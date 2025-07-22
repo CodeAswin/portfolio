@@ -267,11 +267,7 @@ const Works = () => {
             </div>
             <h3 className="text-5xl font-bold text-slate-200 mb-8 animate-neon-glow-enhanced">No {activeTab === '3d' ? '3D Art' : activeTab === 'thumbnails' ? 'Thumbnails' : 'Videos'} Yet</h3>
             <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed animate-data-stream-enhanced mb-8">
-<<<<<<< HEAD
-              Add your {activeTab} items to the portfolioData.ts file to display them here
-=======
               I have not added {activeTab} yet. It will be soon added
->>>>>>> e6a653e (Initial commit)
             </p>
           </div>
         )}
