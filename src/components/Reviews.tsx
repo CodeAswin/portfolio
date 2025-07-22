@@ -98,7 +98,7 @@ const Reviews = () => {
           </h2>
           
           <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-           feedback from creators who've achieved remarkable results with professional designs
+            Real feedback from creators who've achieved remarkable results with professional designs
           </p>
           
           {/* Stats */}
