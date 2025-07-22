@@ -52,22 +52,48 @@ const Works = () => {
 
   // Helper function to convert Google Drive URLs to direct image URLs
   const convertGDriveUrl = (url: string): string => {
-    // Handle Google Drive URLs - improved regex to handle your format
+    console.log('🔍 Processing URL:', url);
+    
+    // Handle Google Drive URLs with multiple conversion methods
     if (url.includes('drive.google.com')) {
-      // Match file ID from various Google Drive URL formats
-      const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      // Try multiple regex patterns to extract file ID
+      let fileId = null;
+      
+      // Pattern 1: /file/d/FILE_ID/view
+      let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) fileId = match[1];
+      
+      // Pattern 2: id= parameter
+      if (!fileId) {
+        match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match) fileId = match[1];
+      }
+      
+      // Pattern 3: After /d/ until next /
+      if (!fileId) {
+        match = url.match(/\/d\/([^\/\?]+)/);
+        if (match) fileId = match[1];
+      }
+      
+      console.log('📁 Extracted file ID:', fileId);
+      
       if (fileIdMatch && fileIdMatch[1]) {
-        const fileId = fileIdMatch[1];
-        console.log('Converting Google Drive URL:', url);
-        console.log('Extracted file ID:', fileId);
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('Direct URL:', directUrl);
+        // Try multiple Google Drive direct URL formats
+        const directUrls = [
+          `https://drive.google.com/uc?export=view&id=${fileId}`,
+          `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`,
+          `https://lh3.googleusercontent.com/d/${fileId}=w1000`
+        ];
+        
+        const directUrl = directUrls[0]; // Start with the first one
+        console.log('🔗 Direct URL:', directUrl);
         return directUrl;
       }
+      
+      console.log('❌ Could not extract file ID from Google Drive URL');
     }
     
-    // Return original URL if not a Google Drive URL
-    console.log('Using original URL:', url);
+    console.log('✅ Using original URL:', url);
     return url;
   };
 
@@ -82,6 +108,7 @@ const Works = () => {
 
   const getThumbnailContent = (item: WorkItem) => {
     const displayUrl = getDisplayUrl(item);
+    console.log('🖼️ Rendering item:', item.name, 'with URL:', displayUrl);
 
     if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
       // For video files, show video element with poster if available
@@ -116,18 +143,39 @@ const Works = () => {
           alt={item.name} 
           className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
           style={{ maxHeight: '400px' }}
-          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
           onError={(e) => {
-            console.log('Image failed to load:', displayUrl);
-            // Try different fallback images
-            if (!e.currentTarget.src.includes('unsplash')) {
+            console.log('❌ Image failed to load:', displayUrl);
+            const currentSrc = e.currentTarget.src;
+            
+            // If it's a Google Drive URL that failed, try alternative formats
+            if (currentSrc.includes('drive.google.com') && item.url.includes('drive.google.com')) {
+              const fileIdMatch = item.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+              if (fileIdMatch) {
+                const fileId = fileIdMatch[1];
+                if (currentSrc.includes('uc?export=view')) {
+                  console.log('🔄 Trying thumbnail format...');
+                  e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                  return;
+                } else if (currentSrc.includes('thumbnail')) {
+                  console.log('🔄 Trying googleusercontent format...');
+                  e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+                  return;
+                }
+              }
+            }
+            
+            // Final fallbacks
+            if (!currentSrc.includes('unsplash')) {
+              console.log('🔄 Trying Unsplash fallback...');
               e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
-            } else if (!e.currentTarget.src.includes('placeholder')) {
+            } else if (!currentSrc.includes('placeholder')) {
+              console.log('🔄 Using placeholder fallback...');
               e.currentTarget.src = 'https://via.placeholder.com/400x300/1e293b/64748b?text=' + encodeURIComponent(item.name);
             }
           }}
           onLoad={() => {
-            console.log('Image loaded successfully:', displayUrl);
+            console.log('✅ Image loaded successfully:', displayUrl);
           }}
         />
       </div>
