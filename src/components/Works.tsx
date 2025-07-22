@@ -32,7 +32,7 @@ const Works = () => {
       // For regular video files, open in modal
       setModalContent({
         type: 'video',
-        url: item.url,
+        url: convertGDriveUrl(item.url),
         title: item.name,
         isYouTube: false
       });
@@ -40,7 +40,7 @@ const Works = () => {
       // For images, open in modal
       setModalContent({
         type: 'image',
-        url: item.url,
+        url: convertGDriveUrl(item.url),
         title: item.name
       });
     }
@@ -50,70 +50,85 @@ const Works = () => {
     setModalContent(null);
   };
 
-  const getThumbnailContent = (item: WorkItem) => {
-    if (item.isYouTubeVideo) {
-      const thumbnail = getYouTubeThumbnail(item.url);
-      if (thumbnail) {
-        return (
-          <div className="w-full">
-            <img 
-              src={thumbnail} 
-              alt={item.name} 
-              className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
-              style={{ maxHeight: '400px' }}
-              onError={(e) => {
-                // Fallback if YouTube thumbnail fails
-                e.currentTarget.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
-              }}
-            />
-          </div>
-        );
+  // Helper function to convert Google Drive URLs to direct image URLs
+  const convertGDriveUrl = (url: string): string => {
+    // Handle Google Drive share URLs
+    if (url.includes('drive.google.com/file/d/')) {
+      const fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+      if (fileId) {
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
       }
     }
     
-    // For regular images and videos
+    // Handle Google Drive view URLs
+    if (url.includes('drive.google.com') && url.includes('/view')) {
+      const fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+      if (fileId) {
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
+    }
+    
+    // Return original URL if not a Google Drive URL
+    return url;
+  };
+
+  // Helper function to get display URL (for images and video thumbnails)
+  const getDisplayUrl = (item: WorkItem): string => {
+    if (item.isYouTubeVideo) {
+      const thumbnail = getYouTubeThumbnail(item.url);
+      return thumbnail || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
+    }
+    return convertGDriveUrl(item.url);
+  };
+
+  const getThumbnailContent = (item: WorkItem) => {
+    const displayUrl = getDisplayUrl(item);
+
     if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
-      // For video files, show actual video preview
+      // For video files, show video element with poster if available
       return (
         <div className="w-full">
           <video
-            src={item.url}
+            src={convertGDriveUrl(item.url)}
             className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
             style={{ maxHeight: '400px' }}
             muted
             preload="metadata"
+            poster={displayUrl !== convertGDriveUrl(item.url) ? displayUrl : undefined}
             onError={(e) => {
-              // Fallback if video fails to load
-              const fallbackDiv = document.createElement('div');
-              fallbackDiv.className = 'w-full h-64 bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center';
-              fallbackDiv.innerHTML = `
-                <div class="text-center">
-                  <div class="w-16 h-16 text-slate-400 mx-auto mb-2 flex items-center justify-center">
-                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                  <span class="text-slate-300 text-sm">Video Preview</span>
-                </div>
-              `;
-              e.currentTarget.parentNode?.replaceChild(fallbackDiv, e.currentTarget);
+              // Create fallback image element
+              const img = document.createElement('img');
+              img.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
+              img.alt = item.name;
+              img.className = 'w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110';
+              img.style.maxHeight = '400px';
+              e.currentTarget.parentNode?.replaceChild(img, e.currentTarget);
             }}
           />
         </div>
       );
     }
     
-    // For images
+    // For images (including YouTube thumbnails and Google Drive images)
     return (
       <div className="w-full">
         <img 
-          src={item.url} 
+          src={displayUrl}
           alt={item.name} 
           className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
           style={{ maxHeight: '400px' }}
+          crossOrigin="anonymous"
           onError={(e) => {
-            // Fallback if image fails to load
-            e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
+            console.log('Image failed to load:', displayUrl);
+            // Try different fallback images
+            if (!e.currentTarget.src.includes('unsplash')) {
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
+            } else if (!e.currentTarget.src.includes('placeholder')) {
+              e.currentTarget.src = 'https://via.placeholder.com/400x300/1e293b/64748b?text=' + encodeURIComponent(item.name);
+            }
+          }}
+          onLoad={() => {
+            console.log('Image loaded successfully:', displayUrl);
           }}
         />
       </div>
