@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
-import { portfolioItems, getYouTubeVideoId, getYouTubeThumbnail, WorkItem, isVideoUrl } from '../data/portfolioData';
 
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
@@ -25,11 +24,15 @@ const Works = () => {
   ];
 
   const handleItemClick = (item: WorkItem) => {
+    console.log('🖱️ Item clicked:', item.name, 'URL:', item.url);
+    
     if (item.isYouTubeVideo) {
       // For YouTube videos, open in new tab
+      console.log('🎥 Opening YouTube video in new tab');
       window.open(item.url, '_blank', 'noopener,noreferrer');
     } else if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
       // For regular video files, open in modal
+      console.log('📹 Opening video in modal');
       setModalContent({
         type: 'video',
         url: convertGDriveUrl(item.url),
@@ -38,6 +41,7 @@ const Works = () => {
       });
     } else {
       // For images, open in modal
+      console.log('🖼️ Opening image in modal');
       setModalContent({
         type: 'image',
         url: convertGDriveUrl(item.url),
@@ -47,8 +51,31 @@ const Works = () => {
   };
 
   const closeModal = () => {
+    console.log('❌ Closing modal');
     setModalContent(null);
   };
+
+  // Add keyboard event listener for ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && modalContent) {
+        closeModal();
+      }
+    };
+
+    if (modalContent) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [modalContent]);
 
   // Helper function to convert Google Drive URLs to direct image URLs
   const convertGDriveUrl = (url: string): string => {
@@ -383,7 +410,15 @@ const Works = () => {
 
       {/* Modal */}
       {modalContent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
+          onClick={(e) => {
+            // Close modal when clicking on backdrop
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
           <div className="relative w-full max-w-6xl max-h-[90vh] bg-black/80 rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl">
             <button
               onClick={closeModal}
@@ -400,6 +435,12 @@ const Works = () => {
                     controls
                     autoPlay
                     className="max-w-full max-h-full rounded-lg shadow-2xl"
+                    onError={(e) => {
+                      console.log('❌ Video failed to load:', modalContent.url);
+                    }}
+                    onLoadStart={() => {
+                      console.log('📹 Video loading started:', modalContent.url);
+                    }}
                   >
                     Your browser does not support the video tag.
                   </video>
@@ -410,6 +451,16 @@ const Works = () => {
                     src={modalContent.url}
                     alt={modalContent.title}
                     className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                    onError={(e) => {
+                      console.log('❌ Modal image failed to load:', modalContent.url);
+                      // Try fallback image
+                      if (!e.currentTarget.src.includes('unsplash')) {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop';
+                      }
+                    }}
+                    onLoad={() => {
+                      console.log('✅ Modal image loaded successfully:', modalContent.url);
+                    }}
                   />
                 </div>
               )}
