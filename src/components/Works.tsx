@@ -52,23 +52,22 @@ const Works = () => {
 
   // Helper function to convert Google Drive URLs to direct image URLs
   const convertGDriveUrl = (url: string): string => {
-    // Handle Google Drive share URLs
-    if (url.includes('drive.google.com/file/d/')) {
-      const fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-      if (fileId) {
-        return `https://drive.google.com/uc?export=view&id=${fileId}`;
-      }
-    }
-    
-    // Handle Google Drive view URLs
-    if (url.includes('drive.google.com') && url.includes('/view')) {
-      const fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-      if (fileId) {
-        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    // Handle Google Drive URLs - improved regex to handle your format
+    if (url.includes('drive.google.com')) {
+      // Match file ID from various Google Drive URL formats
+      const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (fileIdMatch && fileIdMatch[1]) {
+        const fileId = fileIdMatch[1];
+        console.log('Converting Google Drive URL:', url);
+        console.log('Extracted file ID:', fileId);
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('Direct URL:', directUrl);
+        return directUrl;
       }
     }
     
     // Return original URL if not a Google Drive URL
+    console.log('Using original URL:', url);
     return url;
   };
 
