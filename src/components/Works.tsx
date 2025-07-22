@@ -55,43 +55,68 @@ const Works = () => {
       const thumbnail = getYouTubeThumbnail(item.url);
       if (thumbnail) {
         return (
-          <img 
-            src={thumbnail} 
-            alt={item.name} 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            onError={(e) => {
-              // Fallback if YouTube thumbnail fails
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
-            }}
-          />
+          <div className="w-full">
+            <img 
+              src={thumbnail} 
+              alt={item.name} 
+              className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
+              style={{ maxHeight: '400px' }}
+              onError={(e) => {
+                // Fallback if YouTube thumbnail fails
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
+              }}
+            />
+          </div>
         );
       }
     }
     
     // For regular images and videos
     if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
-      // For video files, show a video preview
+      // For video files, show actual video preview
       return (
-        <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
-          <div className="text-center">
-            <Video className="w-16 h-16 text-slate-400 mx-auto mb-2" />
-            <span className="text-slate-300 text-sm">Video File</span>
-          </div>
+        <div className="w-full">
+          <video
+            src={item.url}
+            className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
+            style={{ maxHeight: '400px' }}
+            muted
+            preload="metadata"
+            onError={(e) => {
+              // Fallback if video fails to load
+              const fallbackDiv = document.createElement('div');
+              fallbackDiv.className = 'w-full h-64 bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center';
+              fallbackDiv.innerHTML = `
+                <div class="text-center">
+                  <div class="w-16 h-16 text-slate-400 mx-auto mb-2 flex items-center justify-center">
+                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <span class="text-slate-300 text-sm">Video Preview</span>
+                </div>
+              `;
+              e.currentTarget.parentNode?.replaceChild(fallbackDiv, e.currentTarget);
+            }}
+          />
         </div>
       );
     }
     
     // For images
     return (
-      <img 
-        src={item.url} 
-        alt={item.name} 
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        onError={(e) => {
-          // Fallback if image fails to load
-          e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
-        }}
-      />
+      <div className="w-full">
+        <img 
+          src={item.url} 
+          alt={item.name} 
+          className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
+          style={{ maxHeight: '400px' }}
+          onError={(e) => {
+            // Fallback if image fails to load
+            e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
+          }}
+        />
+      </div>
     );
   };
 
@@ -227,7 +252,7 @@ const Works = () => {
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
-              <div className="w-full aspect-[4/3] overflow-hidden rounded-t-2xl relative">
+              <div className="w-full overflow-hidden rounded-t-2xl relative">
                 {getThumbnailContent(item)}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
