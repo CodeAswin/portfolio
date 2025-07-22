@@ -27,7 +27,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 1,
     type: 'thumbnail',
-    url: 'https://cdn.discordapp.com/attachments/1252290999363960897/1395029675557781639/Rendered-edited.png?ex=6878f621&is=6877a4a1&hm=024ecb21bff10bab87ad69f26bb7cf0ee17592ef06ea7f1f2510d787e97d734e',
+    url: 'https://drive.google.com/file/d/1mzU-97tRPvuDhIJeVeVXnI-9-V_5347-/view?usp=sharing',
     name: '3D Minecraft Thumbnail',
     isYouTubeVideo: false,
     enabled: true
