@@ -52,8 +52,8 @@ const Works = () => {
 
   const handleItemClick = (item: WorkItem) => {
     console.log('🖱️ Item clicked:', item.name, 'URL:', item.url);
-    const actualUrl = convertGDriveUrl(item.url);
-    console.log('🔗 Converted URL for modal:', actualUrl);
+    const convertedUrl = convertGDriveUrl(item.url);
+    console.log('🔗 Converted URL for modal:', convertedUrl);
     
     if (item.isYouTubeVideo) {
       // For YouTube videos, open in new tab
@@ -64,7 +64,7 @@ const Works = () => {
       console.log('📹 Opening video in modal');
       setModalContent({
         type: 'video',
-        url: actualUrl,
+        url: convertedUrl,
         title: item.name,
         isYouTube: false
       });
@@ -73,7 +73,7 @@ const Works = () => {
       console.log('🖼️ Opening image in modal');
       setModalContent({
         type: 'image',
-        url: actualUrl,
+        url: convertedUrl,
         title: item.name
       });
     }
@@ -446,24 +446,29 @@ const Works = () => {
             }
           }}
         >
-          <div className="relative w-full max-w-6xl max-h-[90vh] bg-black/80 rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl">
+          <div className="relative w-full max-w-6xl max-h-[90vh] bg-slate-900/95 rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl backdrop-blur-xl">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 z-20 w-12 h-12 bg-slate-800/80 hover:bg-slate-700/80 rounded-full flex items-center justify-center text-white/80 hover:text-white transition-all duration-300 backdrop-blur-sm border border-slate-600/30"
+              className="absolute top-4 right-4 z-20 w-12 h-12 bg-slate-800/90 hover:bg-slate-700/90 rounded-full flex items-center justify-center text-white/80 hover:text-white transition-all duration-300 backdrop-blur-sm border border-slate-600/30 shadow-lg"
             >
               <X size={24} />
             </button>
             
-            <div className="w-full h-full">
+            <div className="w-full h-full p-4">
               {modalContent.type === 'video' && !modalContent.isYouTube ? (
-                <div className="flex items-center justify-center min-h-[60vh] p-8">
+                <div className="flex items-center justify-center min-h-[60vh]">
                   <video
                     src={modalContent.url}
                     controls
                     autoPlay
-                    className="max-w-full max-h-[80vh] rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[75vh] rounded-lg shadow-2xl bg-black"
                     onError={(e) => {
                       console.log('❌ Video failed to load:', modalContent.url);
+                      // Show error message
+                      const errorDiv = document.createElement('div');
+                      errorDiv.className = 'text-white text-center p-8';
+                      errorDiv.innerHTML = `<p>Failed to load video: ${modalContent.title}</p>`;
+                      e.currentTarget.parentNode?.replaceChild(errorDiv, e.currentTarget);
                     }}
                     onLoadStart={() => {
                       console.log('📹 Video loading started:', modalContent.url);
@@ -473,29 +478,45 @@ const Works = () => {
                   </video>
                 </div>
               ) : (
-                <div className="flex items-center justify-center min-h-[60vh] p-8">
+                <div className="flex items-center justify-center min-h-[60vh]">
                   <img
                     src={modalContent.url}
                     alt={modalContent.title}
-                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+                    referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
                     onError={(e) => {
                       console.log('❌ Modal image failed to load:', modalContent.url);
-                      // Try different Google Drive formats
                       const currentSrc = e.currentTarget.src;
-                      if (currentSrc.includes('uc?export=view') && modalContent.url.includes('drive.google.com')) {
-                        const fileIdMatch = modalContent.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                        if (fileIdMatch) {
-                          const fileId = fileIdMatch[1];
-                          console.log('🔄 Trying thumbnail format for modal...');
-                          e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-                          return;
+                      
+                      // Try different Google Drive formats
+                      if (currentSrc.includes('drive.google.com')) {
+                        const originalUrl = modalContent.url;
+                        if (originalUrl.includes('drive.google.com')) {
+                          const fileIdMatch = originalUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                          if (fileIdMatch) {
+                            const fileId = fileIdMatch[1];
+                            if (currentSrc.includes('uc?export=view')) {
+                              console.log('🔄 Trying thumbnail format for modal...');
+                              e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                              return;
+                            } else if (currentSrc.includes('thumbnail')) {
+                              console.log('🔄 Trying googleusercontent format for modal...');
+                              e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+                              return;
+                            }
+                          }
                         }
                       }
+                      
                       // Final fallback
                       if (!currentSrc.includes('placeholder')) {
                         console.log('🔄 Using placeholder for modal...');
-                        e.currentTarget.src = `https://via.placeholder.com/800x600/1e293b/64748b?text=${encodeURIComponent(modalContent.title)}`;
+                        e.currentTarget.src = `https://via.placeholder.com/800x600/334155/94a3b8?text=${encodeURIComponent(modalContent.title)}`;
                       }
+                    }}
+                    onLoad={() => {
+                      console.log('✅ Modal image loaded successfully:', modalContent.url);
                     }}
                     onLoad={() => {
                       console.log('✅ Modal image loaded successfully:', modalContent.url);
@@ -503,7 +524,7 @@ const Works = () => {
                   />
                 </div>
               )}
-              <div className="p-6 border-t border-slate-600/30">
+              <div className="p-4 border-t border-slate-600/30 bg-slate-800/50">
                 <h3 className="text-white font-medium text-lg">{modalContent.title}</h3>
               </div>
             </div>
