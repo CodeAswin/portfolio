@@ -37,6 +37,7 @@ const Works = () => {
     title: string;
     isYouTube?: boolean;
   } | null>(null);
+  const [imageDimensions, setImageDimensions] = useState<{[key: string]: {width: number, height: number}}>({});
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -50,7 +51,7 @@ const Works = () => {
     { id: 'videos', label: 'Videos', icon: Video, color: 'from-emerald-500 to-teal-500', accent: 'emerald' }
   ];
 
-  // Helper function to convert Google Drive URLs to direct image URLs
+  // Enhanced Google Drive URL converter
   const convertGDriveUrl = (url: string): string => {
     console.log('🔍 Converting URL:', url);
     
@@ -73,6 +74,7 @@ const Works = () => {
       }
       
       if (fileId) {
+        // Use the most reliable format for direct viewing
         const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
         console.log('✅ Converted to:', directUrl);
         return directUrl;
@@ -82,16 +84,47 @@ const Works = () => {
     return url;
   };
 
+  // Load image dimensions for adaptive sizing
+  const loadImageDimensions = (item: WorkItem) => {
+    const imageUrl = getDisplayUrl(item);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      setImageDimensions(prev => ({
+        ...prev,
+        [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
+      }));
+    };
+    img.src = imageUrl;
+  };
+
+  // Get aspect ratio for image
+  const getImageAspectRatio = (item: WorkItem): string => {
+    const dimensions = imageDimensions[item.id];
+    if (dimensions) {
+      const aspectRatio = dimensions.width / dimensions.height;
+      if (aspectRatio > 1.7) return 'aspect-[16/9]'; // Wide
+      if (aspectRatio > 1.3) return 'aspect-[4/3]'; // Standard
+      if (aspectRatio > 0.9) return 'aspect-square'; // Square
+      return 'aspect-[3/4]'; // Portrait
+    }
+    return 'aspect-video'; // Default fallback
+  };
+
   const handleItemClick = (item: WorkItem) => {
     console.log('🖱️ Item clicked:', item.name);
-    const convertedUrl = convertGDriveUrl(item.url);
+    const originalUrl = item.url;
+    const convertedUrl = convertGDriveUrl(originalUrl);
+    
+    console.log('📸 Original URL:', originalUrl);
+    console.log('🔄 Converted URL:', convertedUrl);
     
     if (item.isYouTubeVideo) {
-      window.open(item.url, '_blank', 'noopener,noreferrer');
+      window.open(originalUrl, '_blank', 'noopener,noreferrer');
     } else {
       setModalContent({
-        type: isVideoUrl(item.url) ? 'video' : 'image',
-        url: convertedUrl,
+        type: isVideoUrl(originalUrl) ? 'video' : 'image',
+        url: convertedUrl, // Use the converted URL
         title: item.name,
         isYouTube: false
       });
@@ -139,6 +172,15 @@ const Works = () => {
       (activeTab === 'videos' && item.type === 'video')
     )
   );
+
+  // Load dimensions for all filtered works
+  useEffect(() => {
+    filteredWorks.forEach(item => {
+      if (!imageDimensions[item.id]) {
+        loadImageDimensions(item);
+      }
+    });
+  }, [filteredWorks]);
 
   return (
     <section id="works" className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-gray-900 py-32 relative overflow-hidden">
@@ -221,23 +263,32 @@ const Works = () => {
           ))}
         </div>
 
-        {/* Works Grid - FIXED UNIFORM SIZING */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {/* Works Grid - ADAPTIVE SIZING */}
+        <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 break-inside-avoid mb-8"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
-              {/* FIXED: Uniform aspect ratio container */}
-              <div className="w-full aspect-video overflow-hidden rounded-t-2xl relative bg-slate-800/50">
+              {/* ADAPTIVE: Image container that adapts to image dimensions */}
+              <div className="w-full overflow-hidden rounded-t-2xl relative bg-slate-800/50">
                 <img 
                   src={getDisplayUrl(item)}
                   alt={item.name} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                   crossOrigin="anonymous"
+                  onLoad={(e) => {
+                    console.log('✅ Image loaded successfully:', getDisplayUrl(item));
+                    // Update dimensions when image loads
+                    const img = e.currentTarget;
+                    setImageDimensions(prev => ({
+                      ...prev,
+                      [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
+                    }));
+                  }}
                   onError={(e) => {
                     console.log('❌ Image failed to load:', getDisplayUrl(item));
                     const currentSrc = e.currentTarget.src;
@@ -254,17 +305,18 @@ const Works = () => {
                           console.log('🔄 Trying googleusercontent format...');
                           e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
                           return;
+                        } else if (currentSrc.includes('googleusercontent')) {
+                          console.log('🔄 Trying preview format...');
+                          e.currentTarget.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                          return;
                         }
                       }
                     }
                     
                     if (!currentSrc.includes('placeholder')) {
                       console.log('🔄 Using placeholder fallback...');
-                      e.currentTarget.src = `https://via.placeholder.com/400x225/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
+                      e.currentTarget.src = `https://via.placeholder.com/400x300/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
                     }
-                  }}
-                  onLoad={() => {
-                    console.log('✅ Image loaded successfully:', getDisplayUrl(item));
                   }}
                 />
                 
@@ -341,7 +393,7 @@ const Works = () => {
         </div>
       </div>
 
-      {/* FIXED MODAL - Shows actual images */}
+      {/* FIXED MODAL - Shows actual images with better error handling */}
       {modalContent && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fade-in"
@@ -386,38 +438,40 @@ const Works = () => {
                     className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
                     referrerPolicy="no-referrer"
                     crossOrigin="anonymous"
+                    onLoad={() => {
+                      console.log('✅ Modal image loaded successfully:', modalContent.url);
+                    }}
                     onError={(e) => {
                       console.log('❌ Modal image failed to load:', modalContent.url);
                       const currentSrc = e.currentTarget.src;
+                      const originalUrl = modalContent.url;
                       
-                      // Try different Google Drive formats
-                      if (currentSrc.includes('drive.google.com')) {
-                        const originalUrl = modalContent.url;
-                        if (originalUrl.includes('drive.google.com')) {
-                          const fileIdMatch = originalUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                          if (fileIdMatch) {
-                            const fileId = fileIdMatch[1];
-                            if (currentSrc.includes('uc?export=view')) {
-                              console.log('🔄 Trying thumbnail format for modal...');
-                              e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w2000`;
-                              return;
-                            } else if (currentSrc.includes('thumbnail')) {
-                              console.log('🔄 Trying googleusercontent format for modal...');
-                              e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w2000`;
-                              return;
-                            }
+                      // Try different Google Drive formats for modal
+                      if (originalUrl.includes('drive.google.com')) {
+                        const fileIdMatch = originalUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                        if (fileIdMatch) {
+                          const fileId = fileIdMatch[1];
+                          if (currentSrc.includes('uc?export=view')) {
+                            console.log('🔄 Modal: Trying thumbnail format...');
+                            e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w2000`;
+                            return;
+                          } else if (currentSrc.includes('thumbnail')) {
+                            console.log('🔄 Modal: Trying googleusercontent format...');
+                            e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w2000`;
+                            return;
+                          } else if (currentSrc.includes('googleusercontent')) {
+                            console.log('🔄 Modal: Trying preview format...');
+                            e.currentTarget.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                            return;
                           }
                         }
                       }
                       
-                      // Final fallback
+                      // Final fallback for modal
                       if (!currentSrc.includes('placeholder')) {
-                        console.log('🔄 Using placeholder for modal...');
+                        console.log('🔄 Modal: Using placeholder...');
                         e.currentTarget.src = `https://via.placeholder.com/800x600/334155/94a3b8?text=${encodeURIComponent(modalContent.title)}`;
                       }
-                    }}
-                    onLoad={() => {
-                      console.log('✅ Modal image loaded successfully:', modalContent.url);
                     }}
                   />
                 </div>
