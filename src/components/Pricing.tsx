@@ -62,8 +62,8 @@ const Pricing = () => {
         {/* Enhanced Section Header with more animations */}
         <div className="text-center mb-24 animate-fade-in">
           <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-slate-800/60 to-slate-700/60 backdrop-blur-xl rounded-full border border-slate-600/40 mb-12 shadow-2xl animate-shimmer">
-            <DollarSign className="w-6 h-6 text-emerald-400 animate-bounce-3d" />
-            <span className="text-emerald-400 font-semibold text-lg animate-pulse">Secure Payment Options</span>
+            <DollarSign className="w-6 h-6 text-emerald-400 animate-pulse-glow-enhanced" />
+            <span className="text-emerald-400 font-semibold text-lg animate-neon-glow-enhanced">Secure Payment Options</span>
           </div>
           
           <h2 className="text-7xl md:text-8xl font-black text-slate-100 mb-8 tracking-tight animate-scale-in">

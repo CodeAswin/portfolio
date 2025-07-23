@@ -31,7 +31,7 @@ const Navigation = () => {
           {/* Logo/Brand */}
           <div className="flex items-center gap-4 animate-slide-in">
             <div className="relative group">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 p-0.5 shadow-2xl">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 p-0.5 shadow-2xl animate-glow">
                 <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center overflow-hidden">
                   <img
                     src="https://media.discordapp.net/attachments/1252290999363960897/1395034472059240498/Clear_style_Edited.png?ex=6878fa98&is=6877a918&hm=2f9d60fbe24f509848740ce17faa08164e5d4e75174df2345487831c0ebd6fd2&=&format=webp&quality=lossless&width=925&height=925"
@@ -40,7 +40,7 @@ const Navigation = () => {
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse-glow-enhanced"></div>
             </div>
             
             <div className="hidden md:block animate-fade-in animation-delay-300">

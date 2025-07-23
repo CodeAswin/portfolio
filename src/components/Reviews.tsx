@@ -89,8 +89,8 @@ const Reviews = () => {
         {/* Section Header */}
         <div className="text-center mb-24 animate-fade-in">
           <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-full border border-slate-600/30 mb-12 shadow-2xl">
-            <MessageSquare className="w-6 h-6 text-purple-400" />
-            <span className="text-purple-400 font-semibold text-lg">Client Reviews</span>
+            <MessageSquare className="w-6 h-6 text-purple-400 animate-pulse-glow-enhanced" />
+            <span className="text-purple-400 font-semibold text-lg animate-neon-glow-enhanced">Client Reviews</span>
           </div>
           
           <h2 className="text-6xl font-bold text-slate-100 mb-8 animate-neon-glow-enhanced">

@@ -54,9 +54,9 @@ const Hero = () => {
         </div>
         
         {/* Location Badge */}
-        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/20 via-yellow-500/20 to-red-500/20 rounded-full border border-orange-500/30 mb-12 animate-fade-in animation-delay-600 hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-500 animate-pulse-glow-enhanced group">
+        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/20 via-yellow-500/20 to-emerald-500/20 rounded-full border border-orange-500/30 mb-12 animate-fade-in animation-delay-600 hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-500 animate-pulse-glow-enhanced group shadow-lg shadow-orange-500/20">
           <div className="w-6 h-4 bg-gradient-to-b from-orange-500 via-white to-emerald-500 rounded-sm"></div>
-          <span className="text-slate-200 font-medium group-hover:text-white transition-colors animate-neon-glow">Based in India</span>
+          <span className="text-slate-200 font-medium group-hover:text-white transition-colors animate-neon-glow-enhanced">Based in India</span>
         </div>
         
         {/* Description */}

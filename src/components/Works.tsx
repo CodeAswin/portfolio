@@ -29,7 +29,7 @@ interface WorkItem {
 }
 
 const Works = () => {
-  const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
+  const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('thumbnails');
   const [scrollY, setScrollY] = useState(0);
   const [modalContent, setModalContent] = useState<{
     type: 'image' | 'video';
@@ -50,37 +50,55 @@ const Works = () => {
     { id: 'videos', label: 'Videos', icon: Video, color: 'from-emerald-500 to-teal-500', accent: 'emerald' }
   ];
 
+  // Helper function to convert Google Drive URLs to direct image URLs
+  const convertGDriveUrl = (url: string): string => {
+    console.log('🔍 Converting URL:', url);
+    
+    if (url.includes('drive.google.com')) {
+      let fileId = null;
+      
+      // Extract file ID from various Google Drive URL formats
+      const patterns = [
+        /\/file\/d\/([a-zA-Z0-9_-]+)/,
+        /[?&]id=([a-zA-Z0-9_-]+)/,
+        /\/d\/([^\/\?]+)/
+      ];
+      
+      for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) {
+          fileId = match[1];
+          break;
+        }
+      }
+      
+      if (fileId) {
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        console.log('✅ Converted to:', directUrl);
+        return directUrl;
+      }
+    }
+    
+    return url;
+  };
+
   const handleItemClick = (item: WorkItem) => {
-    console.log('🖱️ Item clicked:', item.name, 'URL:', item.url);
+    console.log('🖱️ Item clicked:', item.name);
     const convertedUrl = convertGDriveUrl(item.url);
-    console.log('🔗 Converted URL for modal:', convertedUrl);
     
     if (item.isYouTubeVideo) {
-      // For YouTube videos, open in new tab
-      console.log('🎥 Opening YouTube video in new tab');
       window.open(item.url, '_blank', 'noopener,noreferrer');
-    } else if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
-      // For regular video files, open in modal
-      console.log('📹 Opening video in modal');
+    } else {
       setModalContent({
-        type: 'video',
+        type: isVideoUrl(item.url) ? 'video' : 'image',
         url: convertedUrl,
         title: item.name,
         isYouTube: false
-      });
-    } else {
-      // For images, open in modal
-      console.log('🖼️ Opening image in modal');
-      setModalContent({
-        type: 'image',
-        url: convertedUrl,
-        title: item.name
       });
     }
   };
 
   const closeModal = () => {
-    console.log('❌ Closing modal');
     setModalContent(null);
   };
 
@@ -94,7 +112,6 @@ const Works = () => {
 
     if (modalContent) {
       document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scroll when modal is open
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -106,47 +123,6 @@ const Works = () => {
     };
   }, [modalContent]);
 
-  // Helper function to convert Google Drive URLs to direct image URLs
-  const convertGDriveUrl = (url: string): string => {
-    console.log('🔍 Processing URL:', url);
-    
-    // Handle Google Drive URLs with multiple conversion methods
-    if (url.includes('drive.google.com')) {
-      // Try multiple regex patterns to extract file ID
-      let fileId = null;
-      
-      // Pattern 1: /file/d/FILE_ID/view
-      let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match) fileId = match[1];
-      
-      // Pattern 2: id= parameter
-      if (!fileId) {
-        match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-        if (match) fileId = match[1];
-      }
-      
-      // Pattern 3: After /d/ until next /
-      if (!fileId) {
-        match = url.match(/\/d\/([^\/\?]+)/);
-        if (match) fileId = match[1];
-      }
-      
-      console.log('📁 Extracted file ID:', fileId);
-      
-      if (fileId) {
-        // Use the most reliable Google Drive direct URL format
-        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-        console.log('🔗 Direct URL:', directUrl);
-        return directUrl;
-      }
-      
-      console.log('❌ Could not extract file ID from Google Drive URL');
-    }
-    
-    console.log('✅ Using original URL:', url);
-    return url;
-  };
-
   // Helper function to get display URL (for images and video thumbnails)
   const getDisplayUrl = (item: WorkItem): string => {
     if (item.isYouTubeVideo) {
@@ -154,106 +130,6 @@ const Works = () => {
       return thumbnail || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
     }
     return convertGDriveUrl(item.url);
-  };
-
-  const getThumbnailContent = (item: WorkItem) => {
-    const displayUrl = getDisplayUrl(item);
-    console.log('🖼️ Rendering item:', item.name, 'with URL:', displayUrl);
-
-    if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
-      // For video files, show video element with poster if available
-      return (
-        <div className="w-full h-full flex items-center justify-center">
-          <video
-            src={convertGDriveUrl(item.url)}
-            className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
-            muted
-            preload="metadata"
-            poster={displayUrl !== convertGDriveUrl(item.url) ? displayUrl : undefined}
-            onError={(e) => {
-              console.log('❌ Video failed to load:', convertGDriveUrl(item.url));
-              // Try to show as image instead
-              const img = document.createElement('img');
-              img.src = convertGDriveUrl(item.url);
-              img.alt = item.name;
-              img.className = 'max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110';
-              img.onerror = () => {
-                console.log('❌ Image also failed, using placeholder');
-                img.src = `https://via.placeholder.com/300x200/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
-              };
-              e.currentTarget.parentNode?.replaceChild(img, e.currentTarget);
-            }}
-          />
-        </div>
-      );
-    }
-    
-    // For images (including YouTube thumbnails and Google Drive images)
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <img 
-          src={displayUrl}
-          alt={item.name} 
-          className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
-          referrerPolicy="no-referrer"
-          crossOrigin="anonymous"
-          onError={(e) => {
-            console.log('❌ Image failed to load:', displayUrl);
-            const currentSrc = e.currentTarget.src;
-            
-            // If it's a Google Drive URL that failed, try alternative formats
-            if (currentSrc.includes('drive.google.com') && item.url.includes('drive.google.com')) {
-              const fileIdMatch = item.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-              if (fileIdMatch) {
-                const fileId = fileIdMatch[1];
-                if (currentSrc.includes('uc?export=view')) {
-                  console.log('🔄 Trying thumbnail format...');
-                  e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-                  return;
-                } else if (currentSrc.includes('thumbnail')) {
-                  console.log('🔄 Trying googleusercontent format...');
-                  e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
-                  return;
-                 } else if (currentSrc.includes('googleusercontent')) {
-                   console.log('🔄 Trying direct file access...');
-                   e.currentTarget.src = `https://drive.google.com/file/d/${fileId}/preview`;
-                   return;
-                }
-              }
-            }
-            
-            // Final fallback to placeholder
-            if (!currentSrc.includes('placeholder')) {
-              console.log('🔄 Using placeholder fallback...');
-              e.currentTarget.src = 'https://via.placeholder.com/300x200/1e293b/64748b?text=' + encodeURIComponent(item.name);
-            }
-          }}
-          onLoad={() => {
-            console.log('✅ Image loaded successfully:', displayUrl);
-          }}
-        />
-      </div>
-    );
-  };
-
-  const getOverlayIcon = (item: WorkItem) => {
-    if (item.isYouTubeVideo) {
-      return (
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="w-16 h-16 bg-gradient-to-r from-red-500/90 to-red-600/90 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl animate-pulse-glow">
-            <Play className="w-8 h-8 text-white ml-1" />
-          </div>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="w-16 h-16 bg-gradient-to-r from-slate-800/90 to-slate-700/90 backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl">
-          <Eye className="w-8 h-8 text-white" />
-        </div>
-      </div>
-    );
   };
 
   const filteredWorks = portfolioItems.filter(item => 
@@ -268,7 +144,6 @@ const Works = () => {
     <section id="works" className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-gray-900 py-32 relative overflow-hidden">
       {/* Enhanced 3D Animated Background Elements */}
       <div className="absolute inset-0">
-        {/* Multiple floating 3D shapes with enhanced animations */}
         <div 
           className="absolute top-32 left-20 w-40 h-40 bg-gradient-to-br from-cyan-400/15 to-blue-500/15 rounded-3xl transform rotate-45 shadow-2xl shadow-cyan-500/10 animate-quantum-spin-enhanced"
           style={{
@@ -287,35 +162,22 @@ const Works = () => {
             transform: `translateY(${scrollY * 0.06}px) scale(${1 + scrollY * 0.0001}) rotate(${scrollY * 0.02}deg)`,
           }}
         ></div>
-        <div 
-          className="absolute top-1/2 right-1/4 w-36 h-36 bg-gradient-to-br from-orange-400/15 to-red-500/15 rounded-2xl shadow-2xl shadow-orange-500/10 animate-data-stream-enhanced"
-          style={{
-            transform: `translateY(${scrollY * 0.09}px) rotate(${30 + scrollY * -0.04}deg)`,
-          }}
-        ></div>
         
-        {/* Matrix rain effect */}
-        <div className="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent animate-matrix-rain-enhanced"></div>
-        <div className="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-transparent via-purple-400/30 to-transparent animate-matrix-rain-enhanced animation-delay-1000"></div>
-        <div className="absolute top-0 left-3/4 w-1 h-full bg-gradient-to-b from-transparent via-emerald-400/30 to-transparent animate-matrix-rain-enhanced animation-delay-2000"></div>
-        
-        {/* Enhanced 3D Grid Pattern with depth */}
+        {/* Enhanced 3D Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `
             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
             linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            radial-gradient(circle at 25% 25%, rgba(6, 182, 212, 0.1) 2px, transparent 2px),
-            radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 2px, transparent 2px)
+            radial-gradient(circle at 25% 25%, rgba(6, 182, 212, 0.1) 2px, transparent 2px)
           `,
-          backgroundSize: '80px 80px, 80px 80px, 160px 160px, 160px 160px',
+          backgroundSize: '80px 80px, 80px 80px, 160px 160px',
           transform: `perspective(1000px) rotateX(${60 + scrollY * 0.01}deg) translateZ(${scrollY * 0.1}px)`
         }}></div>
         
-        {/* Enhanced floating particles */}
+        {/* Floating particles */}
         <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-cyan-400 rounded-full animate-neon-glow-enhanced animation-delay-500 shadow-lg shadow-cyan-400/50"></div>
         <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-purple-400 rounded-full animate-neon-glow-enhanced animation-delay-1000 shadow-lg shadow-purple-400/50"></div>
         <div className="absolute bottom-1/3 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-neon-glow-enhanced animation-delay-1500 shadow-lg shadow-emerald-400/50"></div>
-        <div className="absolute top-1/3 right-1/5 w-3 h-3 bg-orange-400 rounded-full animate-neon-glow-enhanced animation-delay-2000 shadow-lg shadow-orange-400/50"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -359,23 +221,68 @@ const Works = () => {
           ))}
         </div>
 
-        {/* Works Grid */}
+        {/* Works Grid - FIXED UNIFORM SIZING */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 flex flex-col"
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
-              <div className="w-full overflow-hidden rounded-t-2xl relative flex-1 flex items-center justify-center min-h-[200px]">
-                {getThumbnailContent(item)}
+              {/* FIXED: Uniform aspect ratio container */}
+              <div className="w-full aspect-video overflow-hidden rounded-t-2xl relative bg-slate-800/50">
+                <img 
+                  src={getDisplayUrl(item)}
+                  alt={item.name} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    console.log('❌ Image failed to load:', getDisplayUrl(item));
+                    const currentSrc = e.currentTarget.src;
+                    
+                    if (currentSrc.includes('drive.google.com') && item.url.includes('drive.google.com')) {
+                      const fileIdMatch = item.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                      if (fileIdMatch) {
+                        const fileId = fileIdMatch[1];
+                        if (currentSrc.includes('uc?export=view')) {
+                          console.log('🔄 Trying thumbnail format...');
+                          e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                          return;
+                        } else if (currentSrc.includes('thumbnail')) {
+                          console.log('🔄 Trying googleusercontent format...');
+                          e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+                          return;
+                        }
+                      }
+                    }
+                    
+                    if (!currentSrc.includes('placeholder')) {
+                      console.log('🔄 Using placeholder fallback...');
+                      e.currentTarget.src = `https://via.placeholder.com/400x225/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
+                    }
+                  }}
+                  onLoad={() => {
+                    console.log('✅ Image loaded successfully:', getDisplayUrl(item));
+                  }}
+                />
                 
+                {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
-                {getOverlayIcon(item)}
+                {/* Play/View overlay */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className={`w-16 h-16 ${item.isYouTubeVideo ? 'bg-gradient-to-r from-red-500/90 to-red-600/90' : 'bg-gradient-to-r from-slate-800/90 to-slate-700/90'} backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-2xl`}>
+                    {item.isYouTubeVideo ? (
+                      <Play className="w-8 h-8 text-white ml-1" />
+                    ) : (
+                      <Eye className="w-8 h-8 text-white" />
+                    )}
+                  </div>
+                </div>
 
-                {/* YouTube indicator */}
+                {/* Type indicators */}
                 {item.isYouTubeVideo && (
                   <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
                     <Play className="w-3 h-3" />
@@ -383,7 +290,6 @@ const Works = () => {
                   </div>
                 )}
 
-                {/* Video indicator for non-YouTube videos */}
                 {isVideoUrl(item.url) && !item.isYouTubeVideo && (
                   <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
                     <Video className="w-3 h-3" />
@@ -393,7 +299,7 @@ const Works = () => {
               </div>
 
               {/* Item name */}
-              <div className="p-4 flex-shrink-0">
+              <div className="p-4">
                 <h3 className="text-slate-200 font-medium text-sm truncate">{item.name}</h3>
               </div>
             </div>
@@ -435,18 +341,17 @@ const Works = () => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* FIXED MODAL - Shows actual images */}
       {modalContent && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fade-in"
           onClick={(e) => {
-            // Close modal when clicking on backdrop
             if (e.target === e.currentTarget) {
               closeModal();
             }
           }}
         >
-          <div className="relative w-full max-w-6xl max-h-[90vh] bg-slate-900/95 rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl backdrop-blur-xl">
+          <div className="relative w-full max-w-7xl max-h-[95vh] bg-slate-900/98 rounded-2xl overflow-hidden border border-slate-600/30 shadow-2xl backdrop-blur-xl">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 z-20 w-12 h-12 bg-slate-800/90 hover:bg-slate-700/90 rounded-full flex items-center justify-center text-white/80 hover:text-white transition-all duration-300 backdrop-blur-sm border border-slate-600/30 shadow-lg"
@@ -454,35 +359,31 @@ const Works = () => {
               <X size={24} />
             </button>
             
-            <div className="w-full h-full p-4">
+            <div className="w-full h-full p-6">
               {modalContent.type === 'video' && !modalContent.isYouTube ? (
-                <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="flex items-center justify-center min-h-[70vh]">
                   <video
                     src={modalContent.url}
                     controls
                     autoPlay
-                    className="max-w-full max-h-[75vh] rounded-lg shadow-2xl bg-black"
+                    className="max-w-full max-h-[70vh] rounded-lg shadow-2xl bg-black"
                     onError={(e) => {
                       console.log('❌ Video failed to load:', modalContent.url);
-                      // Show error message
                       const errorDiv = document.createElement('div');
                       errorDiv.className = 'text-white text-center p-8';
                       errorDiv.innerHTML = `<p>Failed to load video: ${modalContent.title}</p>`;
                       e.currentTarget.parentNode?.replaceChild(errorDiv, e.currentTarget);
-                    }}
-                    onLoadStart={() => {
-                      console.log('📹 Video loading started:', modalContent.url);
                     }}
                   >
                     Your browser does not support the video tag.
                   </video>
                 </div>
               ) : (
-                <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="flex items-center justify-center min-h-[70vh]">
                   <img
                     src={modalContent.url}
                     alt={modalContent.title}
-                    className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
                     referrerPolicy="no-referrer"
                     crossOrigin="anonymous"
                     onError={(e) => {
@@ -498,11 +399,11 @@ const Works = () => {
                             const fileId = fileIdMatch[1];
                             if (currentSrc.includes('uc?export=view')) {
                               console.log('🔄 Trying thumbnail format for modal...');
-                              e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                              e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w2000`;
                               return;
                             } else if (currentSrc.includes('thumbnail')) {
                               console.log('🔄 Trying googleusercontent format for modal...');
-                              e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+                              e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w2000`;
                               return;
                             }
                           }
@@ -518,13 +419,10 @@ const Works = () => {
                     onLoad={() => {
                       console.log('✅ Modal image loaded successfully:', modalContent.url);
                     }}
-                    onLoad={() => {
-                      console.log('✅ Modal image loaded successfully:', modalContent.url);
-                    }}
                   />
                 </div>
               )}
-              <div className="p-4 border-t border-slate-600/30 bg-slate-800/50">
+              <div className="p-4 border-t border-slate-600/30 bg-slate-800/50 rounded-b-2xl">
                 <h3 className="text-white font-medium text-lg">{modalContent.title}</h3>
               </div>
             </div>
