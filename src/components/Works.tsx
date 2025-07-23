@@ -2,6 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
 import { portfolioItems } from '../data/portfolioData';
 
+// Helper function to check if URL is a video
+const isVideoUrl = (url: string): boolean => {
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv', '.m4v'];
+  const lowerUrl = url.toLowerCase();
+  return videoExtensions.some(ext => lowerUrl.includes(ext)) || url.includes('youtube.com') || url.includes('youtu.be');
+};
+
+// Helper function to get YouTube thumbnail
+const getYouTubeThumbnail = (url: string): string | null => {
+  const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+  if (videoIdMatch) {
+    return `https://img.youtube.com/vi/${videoIdMatch[1]}/maxresdefault.jpg`;
+  }
+  return null;
+};
+
+// Define WorkItem interface
+interface WorkItem {
+  id: string;
+  name: string;
+  url: string;
+  type: '3d' | 'thumbnail' | 'video';
+  enabled: boolean;
+  isYouTubeVideo?: boolean;
+}
+
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
   const [scrollY, setScrollY] = useState(0);
