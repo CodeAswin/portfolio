@@ -52,6 +52,8 @@ const Works = () => {
 
   const handleItemClick = (item: WorkItem) => {
     console.log('🖱️ Item clicked:', item.name, 'URL:', item.url);
+    const actualUrl = convertGDriveUrl(item.url);
+    console.log('🔗 Converted URL for modal:', actualUrl);
     
     if (item.isYouTubeVideo) {
       // For YouTube videos, open in new tab
@@ -62,7 +64,7 @@ const Works = () => {
       console.log('📹 Opening video in modal');
       setModalContent({
         type: 'video',
-        url: convertGDriveUrl(item.url),
+        url: actualUrl,
         title: item.name,
         isYouTube: false
       });
@@ -71,7 +73,7 @@ const Works = () => {
       console.log('🖼️ Opening image in modal');
       setModalContent({
         type: 'image',
-        url: convertGDriveUrl(item.url),
+        url: actualUrl,
         title: item.name
       });
     }
@@ -161,11 +163,10 @@ const Works = () => {
     if (isVideoUrl(item.url) && !item.isYouTubeVideo) {
       // For video files, show video element with poster if available
       return (
-        <div className="w-full">
+        <div className="w-full h-full flex items-center justify-center">
           <video
             src={convertGDriveUrl(item.url)}
-            className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
-            style={{ maxHeight: '400px' }}
+            className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
             muted
             preload="metadata"
             poster={displayUrl !== convertGDriveUrl(item.url) ? displayUrl : undefined}
@@ -175,11 +176,10 @@ const Works = () => {
               const img = document.createElement('img');
               img.src = convertGDriveUrl(item.url);
               img.alt = item.name;
-              img.className = 'w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110';
-              img.style.maxHeight = '400px';
+              img.className = 'max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110';
               img.onerror = () => {
                 console.log('❌ Image also failed, using placeholder');
-                img.src = `https://via.placeholder.com/400x300/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
+                img.src = `https://via.placeholder.com/300x200/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
               };
               e.currentTarget.parentNode?.replaceChild(img, e.currentTarget);
             }}
@@ -190,12 +190,11 @@ const Works = () => {
     
     // For images (including YouTube thumbnails and Google Drive images)
     return (
-      <div className="w-full">
+      <div className="w-full h-full flex items-center justify-center">
         <img 
           src={displayUrl}
           alt={item.name} 
-          className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
-          style={{ maxHeight: '400px' }}
+          className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-110"
           referrerPolicy="no-referrer"
           crossOrigin="anonymous"
           onError={(e) => {
@@ -226,7 +225,7 @@ const Works = () => {
             // Final fallback to placeholder
             if (!currentSrc.includes('placeholder')) {
               console.log('🔄 Using placeholder fallback...');
-              e.currentTarget.src = 'https://via.placeholder.com/400x300/1e293b/64748b?text=' + encodeURIComponent(item.name);
+              e.currentTarget.src = 'https://via.placeholder.com/300x200/1e293b/64748b?text=' + encodeURIComponent(item.name);
             }
           }}
           onLoad={() => {
@@ -365,11 +364,11 @@ const Works = () => {
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 flex flex-col"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
-              <div className="w-full overflow-hidden rounded-t-2xl relative">
+              <div className="w-full overflow-hidden rounded-t-2xl relative flex-1 flex items-center justify-center min-h-[200px]">
                 {getThumbnailContent(item)}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -394,7 +393,7 @@ const Works = () => {
               </div>
 
               {/* Item name */}
-              <div className="p-4">
+              <div className="p-4 flex-shrink-0">
                 <h3 className="text-slate-200 font-medium text-sm truncate">{item.name}</h3>
               </div>
             </div>
@@ -462,7 +461,7 @@ const Works = () => {
                     src={modalContent.url}
                     controls
                     autoPlay
-                    className="max-w-full max-h-full rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[80vh] rounded-lg shadow-2xl"
                     onError={(e) => {
                       console.log('❌ Video failed to load:', modalContent.url);
                     }}
@@ -478,12 +477,24 @@ const Works = () => {
                   <img
                     src={modalContent.url}
                     alt={modalContent.title}
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
                     onError={(e) => {
                       console.log('❌ Modal image failed to load:', modalContent.url);
-                      // Try fallback image
-                      if (!e.currentTarget.src.includes('unsplash')) {
-                        e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop';
+                      // Try different Google Drive formats
+                      const currentSrc = e.currentTarget.src;
+                      if (currentSrc.includes('uc?export=view') && modalContent.url.includes('drive.google.com')) {
+                        const fileIdMatch = modalContent.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                        if (fileIdMatch) {
+                          const fileId = fileIdMatch[1];
+                          console.log('🔄 Trying thumbnail format for modal...');
+                          e.currentTarget.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                          return;
+                        }
+                      }
+                      // Final fallback
+                      if (!currentSrc.includes('placeholder')) {
+                        console.log('🔄 Using placeholder for modal...');
+                        e.currentTarget.src = `https://via.placeholder.com/800x600/1e293b/64748b?text=${encodeURIComponent(modalContent.title)}`;
                       }
                     }}
                     onLoad={() => {
