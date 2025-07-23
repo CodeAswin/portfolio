@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Eye, Cuboid as Cube, Video, Image, ExternalLink, Layers, Palette, Sparkles, Zap, Star, Award, X, Upload } from 'lucide-react';
+import { portfolioItems } from '../data/portfolioData';
 
 const Works = () => {
   const [activeTab, setActiveTab] = useState<'3d' | 'thumbnails' | 'videos'>('3d');
