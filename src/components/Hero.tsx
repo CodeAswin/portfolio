@@ -54,9 +54,9 @@ const Hero = () => {
         </div>
         
         {/* Location Badge */}
-        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-full border border-orange-500/30 mb-12 animate-fade-in animation-delay-600">
+        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/20 via-yellow-500/20 to-red-500/20 rounded-full border border-orange-500/30 mb-12 animate-fade-in animation-delay-600 hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-500 animate-pulse-glow-enhanced group">
           <div className="w-6 h-4 bg-gradient-to-b from-orange-500 via-white to-emerald-500 rounded-sm"></div>
-          <span className="text-slate-200 font-medium">Based in India</span>
+          <span className="text-slate-200 font-medium group-hover:text-white transition-colors animate-neon-glow">Based in India</span>
         </div>
         
         {/* Description */}
@@ -69,26 +69,26 @@ const Hero = () => {
         
         {/* Feature Stats */}
         <div className="flex flex-wrap justify-center gap-8 mb-16 animate-fade-in animation-delay-1200">
-          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 via-cyan-900/20 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-cyan-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-cyan-500/30 animate-glow">
             <Star className="w-8 h-8 text-yellow-400 group-hover:rotate-12 transition-transform" />
             <div className="text-left">
-              <div className="text-slate-100 font-bold text-2xl">Premium</div>
+              <div className="text-slate-100 font-bold text-2xl animate-text-glow">Premium</div>
               <div className="text-slate-400 text-sm">Quality Work</div>
             </div>
           </div>
           
-          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-purple-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 via-purple-900/20 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-purple-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-purple-500/30 animate-glow animation-delay-300">
             <Sparkles className="w-8 h-8 text-purple-400 group-hover:rotate-12 transition-transform" />
             <div className="text-left">
-              <div className="text-slate-100 font-bold text-2xl">Fast</div>
+              <div className="text-slate-100 font-bold text-2xl animate-text-glow">Fast</div>
               <div className="text-slate-400 text-sm">Delivery</div>
             </div>
           </div>
           
-          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-emerald-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl">
+          <div className="group flex items-center gap-4 px-8 py-6 bg-gradient-to-r from-slate-800/50 via-emerald-900/20 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/30 hover:border-emerald-500/50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-emerald-500/30 animate-glow animation-delay-600">
             <Cube className="w-8 h-8 text-emerald-400 group-hover:rotate-12 transition-transform" />
             <div className="text-left">
-              <div className="text-slate-100 font-bold text-2xl">3D</div>
+              <div className="text-slate-100 font-bold text-2xl animate-text-glow">3D</div>
               <div className="text-slate-400 text-sm">Expertise</div>
             </div>
           </div>
@@ -98,13 +98,13 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-20 animate-fade-in animation-delay-1500">
           <a
             href="#works"
-            className="group relative px-12 py-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-2xl text-white font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/25 overflow-hidden"
+            className="group relative px-12 py-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-2xl text-white font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/50 overflow-hidden animate-pulse-glow-enhanced"
           >
             <span className="relative z-10 flex items-center gap-4">
               <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              View Portfolio
+              <span className="animate-text-glow">View Portfolio</span>
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
           </a>
         </div>

@@ -132,14 +132,8 @@ const Works = () => {
       console.log('📁 Extracted file ID:', fileId);
       
       if (fileId) {
-        // Try multiple Google Drive direct URL formats
-        const directUrls = [
-          `https://drive.google.com/uc?export=view&id=${fileId}`,
-          `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`,
-          `https://lh3.googleusercontent.com/d/${fileId}=w1000`
-        ];
-        
-        const directUrl = directUrls[0]; // Start with the first one
+        // Use the most reliable Google Drive direct URL format
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
         console.log('🔗 Direct URL:', directUrl);
         return directUrl;
       }
@@ -176,12 +170,17 @@ const Works = () => {
             preload="metadata"
             poster={displayUrl !== convertGDriveUrl(item.url) ? displayUrl : undefined}
             onError={(e) => {
-              // Create fallback image element
+              console.log('❌ Video failed to load:', convertGDriveUrl(item.url));
+              // Try to show as image instead
               const img = document.createElement('img');
-              img.src = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop';
+              img.src = convertGDriveUrl(item.url);
               img.alt = item.name;
               img.className = 'w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110';
               img.style.maxHeight = '400px';
+              img.onerror = () => {
+                console.log('❌ Image also failed, using placeholder');
+                img.src = `https://via.placeholder.com/400x300/1e293b/64748b?text=${encodeURIComponent(item.name)}`;
+              };
               e.currentTarget.parentNode?.replaceChild(img, e.currentTarget);
             }}
           />
@@ -198,6 +197,7 @@ const Works = () => {
           className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
           style={{ maxHeight: '400px' }}
           referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
           onError={(e) => {
             console.log('❌ Image failed to load:', displayUrl);
             const currentSrc = e.currentTarget.src;
@@ -215,15 +215,16 @@ const Works = () => {
                   console.log('🔄 Trying googleusercontent format...');
                   e.currentTarget.src = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
                   return;
+                 } else if (currentSrc.includes('googleusercontent')) {
+                   console.log('🔄 Trying direct file access...');
+                   e.currentTarget.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                   return;
                 }
               }
             }
             
-            // Final fallbacks
-            if (!currentSrc.includes('unsplash')) {
-              console.log('🔄 Trying Unsplash fallback...');
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop';
-            } else if (!currentSrc.includes('placeholder')) {
+            // Final fallback to placeholder
+            if (!currentSrc.includes('placeholder')) {
               console.log('🔄 Using placeholder fallback...');
               e.currentTarget.src = 'https://via.placeholder.com/400x300/1e293b/64748b?text=' + encodeURIComponent(item.name);
             }

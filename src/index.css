@@ -121,10 +121,18 @@
 
 @keyframes text-glow {
   0%, 100% {
-    text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+    text-shadow: 
+      0 0 10px rgba(6, 182, 212, 0.8),
+      0 0 20px rgba(6, 182, 212, 0.6),
+      0 0 30px rgba(6, 182, 212, 0.4),
+      0 0 40px rgba(6, 182, 212, 0.2);
   }
   50% {
-    text-shadow: 0 0 40px rgba(6, 182, 212, 0.8), 0 0 60px rgba(139, 92, 246, 0.6);
+    text-shadow: 
+      0 0 20px rgba(6, 182, 212, 1),
+      0 0 40px rgba(6, 182, 212, 0.8),
+      0 0 60px rgba(139, 92, 246, 0.6),
+      0 0 80px rgba(139, 92, 246, 0.4);
   }
 }
 
@@ -452,14 +460,16 @@
       0 0 5px currentColor,
       0 0 10px currentColor,
       0 0 15px currentColor,
-      0 0 20px currentColor;
+      0 0 20px currentColor,
+      0 0 25px currentColor;
   }
   50% {
     text-shadow: 
-      0 0 10px currentColor,
-      0 0 20px currentColor,
+      0 0 15px currentColor,
       0 0 30px currentColor,
-      0 0 40px currentColor;
+      0 0 45px currentColor,
+      0 0 60px currentColor,
+      0 0 75px currentColor;
   }
 }
 
