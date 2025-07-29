@@ -150,7 +150,7 @@ export const portfolioItems: WorkItem[] = [
     url: '/portfolio/assets/11.png',
     name: 'Bottle Render With Fog',
     isYouTubeVideo: false,
-    enabled: true
+    enabled: false
   },
   // Example Local Video (MP4)
   
