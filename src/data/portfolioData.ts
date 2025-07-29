@@ -142,6 +142,16 @@ export const portfolioItems: WorkItem[] = [
     isYouTubeVideo: true,
     enabled: false
   },
+
+
+  {
+    id: 13,
+    type: '3d',
+    url: '/portfolio/assets/11.png',
+    name: 'Bottle Render With Fog',
+    isYouTubeVideo: false,
+    enabled: true
+  },
   // Example Local Video (MP4)
   
   // Example Google Drive Image (just paste the share URL directly):
