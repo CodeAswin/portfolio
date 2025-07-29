@@ -137,10 +137,20 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 12,
     type: 'video',
-    url: 'https://www.youtube.com/watch?v=',
-    name: '3D Minecraft World Render',
-    isYouTubeVideo: true,
-    enabled: false
+    url: '/portfolio/assets/12.mkv',
+    name: '3D Animation',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+
+  {
+    id: 13,
+    type: '3d',
+    url: '/portfolio/assets/11.png',
+    name: 'Bottles 3D Render With Fog',
+    isYouTubeVideo: false,
+    enabled: true
   },
   // Example Local Video (MP4)
   

@@ -288,42 +288,63 @@ const Works = () => {
             >
               {/* ADAPTIVE: Image container that adapts to image dimensions */}
               <div className={`w-full max-w-full mx-auto overflow-hidden rounded-t-2xl relative bg-slate-800/50 ${getImageAspectRatio(item)} flex items-center justify-center animate-glow animate-gradient`}>
-                <img
-                  src={getDisplayUrl(item)}
-                  alt={item.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900"
-                  referrerPolicy="no-referrer"
-                  crossOrigin="anonymous"
-                  ref={el => {
-                    if (el && el.naturalWidth && el.naturalHeight && !aspectRatios[item.id]) {
+                {isVideoUrl(item.url) && !item.isYouTubeVideo ? (
+                  <video
+                    src={item.url}
+                    className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900"
+                    controls={false}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    onLoadedMetadata={e => {
+                      const video = e.currentTarget;
+                      if (video.videoWidth && video.videoHeight && !aspectRatios[item.id]) {
+                        setAspectRatios(prev => ({
+                          ...prev,
+                          [item.id]: calcAspectClass(video.videoWidth, video.videoHeight)
+                        }));
+                      }
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={getDisplayUrl(item)}
+                    alt={item.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
+                    ref={el => {
+                      if (el && el.naturalWidth && el.naturalHeight && !aspectRatios[item.id]) {
+                        setImageDimensions(prev => ({
+                          ...prev,
+                          [item.id]: { width: el.naturalWidth, height: el.naturalHeight }
+                        }));
+                        setAspectRatios(prev => ({
+                          ...prev,
+                          [item.id]: calcAspectClass(el.naturalWidth, el.naturalHeight)
+                        }));
+                      }
+                    }}
+                    onLoad={e => {
+                      const img = e.currentTarget;
                       setImageDimensions(prev => ({
                         ...prev,
-                        [item.id]: { width: el.naturalWidth, height: el.naturalHeight }
+                        [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
                       }));
                       setAspectRatios(prev => ({
                         ...prev,
-                        [item.id]: calcAspectClass(el.naturalWidth, el.naturalHeight)
+                        [item.id]: calcAspectClass(img.naturalWidth, img.naturalHeight)
                       }));
-                    }
-                  }}
-                  onLoad={e => {
-                    const img = e.currentTarget;
-                    setImageDimensions(prev => ({
-                      ...prev,
-                      [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
-                    }));
-                    setAspectRatios(prev => ({
-                      ...prev,
-                      [item.id]: calcAspectClass(img.naturalWidth, img.naturalHeight)
-                    }));
-                  }}
-                  onError={e => {
-                    const placeholder = '/portfolio/assets/placeholder.png';
-                    if (e.currentTarget.src !== window.location.origin + placeholder && e.currentTarget.src !== placeholder) {
-                      e.currentTarget.src = placeholder;
-                    }
-                  }}
-                />
+                    }}
+                    onError={e => {
+                      const placeholder = '/portfolio/assets/placeholder.png';
+                      if (e.currentTarget.src !== window.location.origin + placeholder && e.currentTarget.src !== placeholder) {
+                        e.currentTarget.src = placeholder;
+                      }
+                    }}
+                  />
+                )}
               </div>
 
               {/* Overlay gradient */}
