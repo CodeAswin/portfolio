@@ -100,26 +100,59 @@ const Works = () => {
     return url;
   };
 
-  // Load image dimensions for adaptive sizing
-  const loadImageDimensions = (item: WorkItem) => {
-    const imageUrl = getDisplayUrl(item);
-    const img = document.createElement('img');
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      setImageDimensions(prev => ({
-        ...prev,
-        [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
-      }));
-      setAspectRatios(prev => ({
-        ...prev,
-        [item.id]: calcAspectClass(img.naturalWidth, img.naturalHeight)
-      }));
+  // Optimized image loading with intersection observer
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const imageRefs = useRef<{[key: number]: HTMLImageElement | HTMLVideoElement | null}>({});
+
+  const filteredWorks = portfolioItems.filter(item => 
+    item.enabled && (
+      (activeTab === '3d' && item.type === '3d') ||
+      (activeTab === 'thumbnails' && item.type === 'thumbnail') ||
+      (activeTab === 'videos' && item.type === 'video')
+    )
+  );
+
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const itemId = parseInt(entry.target.getAttribute('data-item-id') || '0');
+            if (!loadedImages.has(itemId)) {
+              setLoadedImages(prev => new Set([...prev, itemId]));
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '50px',
+        threshold: 0.1
+      }
+    );
+
+    Object.values(imageRefs.current).forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [filteredWorks, loadedImages]);
+
+  // Preload critical images
+  useEffect(() => {
+    const preloadImages = () => {
+      filteredWorks.slice(0, 6).forEach(item => {
+        if (!item.isYouTubeVideo) {
+          const img = new window.Image();
+          img.src = getDisplayUrl(item);
+        }
+      });
     };
-    img.onerror = () => {
-      // If image fails, fallback to 16/9
-    };
-    img.src = imageUrl;
-  };
+
+    // Preload after initial render
+    const timer = setTimeout(preloadImages, 100);
+    return () => clearTimeout(timer);
+  }, [filteredWorks]);
 
   const handleItemClick = (item: WorkItem) => {
     console.log('🖱️ Item clicked:', item.name);
@@ -179,19 +212,23 @@ const Works = () => {
     return convertGDriveUrl(item.url);
   };
 
-  const filteredWorks = portfolioItems.filter(item => 
-    item.enabled && (
-      (activeTab === '3d' && item.type === '3d') ||
-      (activeTab === 'thumbnails' && item.type === 'thumbnail') ||
-      (activeTab === 'videos' && item.type === 'video')
-    )
-  );
-
   // Load dimensions for all filtered works
   useEffect(() => {
     filteredWorks.forEach(item => {
-      if (!imageDimensions[item.id]) {
-        loadImageDimensions(item);
+      if (!imageDimensions[item.id] && !item.isYouTubeVideo) {
+        const img = new window.Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          setImageDimensions(prev => ({
+            ...prev,
+            [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
+          }));
+          setAspectRatios(prev => ({
+            ...prev,
+            [item.id]: calcAspectClass(img.naturalWidth, img.naturalHeight)
+          }));
+        };
+        img.src = getDisplayUrl(item);
       }
     });
   }, [filteredWorks]);
@@ -290,12 +327,16 @@ const Works = () => {
               <div className={`w-full max-w-full mx-auto overflow-hidden rounded-t-2xl relative bg-slate-800/50 ${getImageAspectRatio(item)} flex items-center justify-center animate-glow animate-gradient`}>
                 {isVideoUrl(item.url) && !item.isYouTubeVideo ? (
                   <video
-                    src={item.url}
-                    className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900"
+                    src={loadedImages.has(item.id) ? item.url : ''}
+                    className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900 video-optimized"
                     controls={false}
                     preload="metadata"
                     muted
                     playsInline
+                    data-item-id={item.id}
+                    ref={el => {
+                      imageRefs.current[item.id] = el;
+                    }}
                     onLoadedMetadata={e => {
                       const video = e.currentTarget;
                       if (video.videoWidth && video.videoHeight && !aspectRatios[item.id]) {
@@ -305,16 +346,22 @@ const Works = () => {
                         }));
                       }
                     }}
+                    onError={e => {
+                      console.error('Video failed to load:', item.url);
+                      // Fallback to placeholder or show error state
+                    }}
                   />
                 ) : (
                   <img
-                    src={getDisplayUrl(item)}
+                    src={loadedImages.has(item.id) ? getDisplayUrl(item) : ''}
                     alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900 image-optimized"
                     loading="lazy"
                     referrerPolicy="no-referrer"
                     crossOrigin="anonymous"
+                    data-item-id={item.id}
                     ref={el => {
+                      imageRefs.current[item.id] = el;
                       if (el && el.naturalWidth && el.naturalHeight && !aspectRatios[item.id]) {
                         setImageDimensions(prev => ({
                           ...prev,
