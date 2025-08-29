@@ -152,6 +152,16 @@ export const portfolioItems: WorkItem[] = [
     isYouTubeVideo: false,
     enabled: true
   },
+
+
+  {
+    id: 14,
+    type: 'thumbnail',
+    url: '/portfolio/assets/editedversion.png',
+    name: 'Bike Racing Thumbnail',
+    isYouTubeVideo: false,
+    enabled: true
+  },
   // Example Local Video (MP4)
   
   // Example Google Drive Image (just paste the share URL directly):
