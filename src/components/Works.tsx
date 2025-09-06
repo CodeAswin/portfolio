@@ -138,13 +138,17 @@ const Works = () => {
     return () => observer.disconnect();
   }, [filteredWorks, loadedImages]);
 
-  // Preload critical images
+  // Preload critical images with better optimization
   useEffect(() => {
     const preloadImages = () => {
-      filteredWorks.slice(0, 6).forEach(item => {
+      filteredWorks.slice(0, 3).forEach(item => {
         if (!item.isYouTubeVideo) {
           const img = new window.Image();
+          img.loading = 'eager';
           img.src = getDisplayUrl(item);
+          img.onload = () => {
+            setLoadedImages(prev => new Set([...prev, item.id]));
+          };
         }
       });
     };
@@ -319,7 +323,7 @@ const Works = () => {
           {filteredWorks.map((item, index) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/40 break-inside-avoid mb-8 animate-glow animate-gradient shadow-cyan-500/20"
+              className="group relative overflow-hidden rounded-2xl cursor-pointer animate-fade-in bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-xl border border-slate-600/40 hover:border-cyan-500/60 transition-all duration-700 transform hover:scale-110 hover:shadow-2xl hover:shadow-cyan-500/40 break-inside-avoid mb-8 animate-glow animate-gradient shadow-cyan-500/20 gpu-accelerated"
               style={{ animationDelay: `${index * 200}ms` }}
               onClick={() => handleItemClick(item)}
             >
@@ -330,9 +334,10 @@ const Works = () => {
                     src={loadedImages.has(item.id) ? item.url : ''}
                     className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900 video-optimized"
                     controls={false}
-                    preload="metadata"
+                    preload={index < 3 ? "metadata" : "none"}
                     muted
                     playsInline
+                    loading={index < 3 ? "eager" : "lazy"}
                     data-item-id={item.id}
                     ref={el => {
                       imageRefs.current[item.id] = el;
@@ -354,11 +359,13 @@ const Works = () => {
                 ) : (
                   <img
                     src={loadedImages.has(item.id) ? getDisplayUrl(item) : ''}
-                  alt={item.name} 
+                    alt={item.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900 image-optimized"
-                    loading="lazy"
-                  referrerPolicy="no-referrer"
-                  crossOrigin="anonymous"
+                    loading={index < 3 ? "eager" : "lazy"}
+                    referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
+                    decoding="async"
+                    fetchPriority={index < 3 ? "high" : "auto"}
                     data-item-id={item.id}
                     ref={el => {
                       imageRefs.current[item.id] = el;
