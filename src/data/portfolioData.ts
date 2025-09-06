@@ -23,142 +23,129 @@ export const portfolioItems: WorkItem[] = [
   // 2. Right-click image → "Copy Link"
   // 3. Paste the Discord CDN URL directly
   
-  // Example 3D Art (using external image URL)
+  // Latest items first (highest IDs at top)
   {
-    id: 1,
-    type: '3d',
-    url: '/portfolio/assets/1.png',
-    name: '3D Minecraft PFP',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-  
-  // Example Thumbnail (using external image URL)
-  {
-    id: 2,
-    type: '3d',
-    url: '/portfolio/assets/myphoto.png',
-    name: 'Minecraft World Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-  
-  // Example YouTube Video
-  {
-    id: 3,
+    id: 14,
     type: 'thumbnail',
-    url: '/portfolio/assets/6.png',
-    name: '3D Minecraft Thumbnail',
+    url: '/portfolio/assets/editedversion.png',
+    name: 'Unauthorized use is forbidden',
     isYouTubeVideo: false,
     enabled: true
   },
-  
-
-  {
-    id: 4,
-    type: 'thumbnail',
-    url: '/portfolio/assets/5.png',
-    name: '3D Minecraft Thumbnail',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-  
-
-  {
-    id: 5,
-    type: 'thumbnail',
-    url: '/portfolio/assets/2.png',
-    name: '3D Minecraft Thumbnail',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-   
-
-  {
-    id: 6,
-    type: '3d',
-    url: '/portfolio/assets/7.png',
-    name: 'BMW Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-     
-
-  {
-    id: 7,
-    type: '3d',
-    url: '/portfolio/assets/8.png',
-    name: 'BMW Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-      
-
-  {
-    id: 8,
-    type: '3d',
-    url: '/portfolio/assets/9.png',
-    name: 'BMW Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-        
-
-  {
-    id: 9,
-    type: '3d',
-    url: '/portfolio/assets/10.png',
-    name: 'Porsche Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-   
-
-  {
-    id: 10,
-    type: 'thumbnail',
-    url: '/portfolio/assets/4.png',
-    name: 'Friverr Minecraft Thumbnail',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-  
-
-  {
-    id: 11,
-    type: '3d',
-    url: '/portfolio/assets/3.png',
-    name: '3D Minecraft World Render',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-
-
-  {
-    id: 12,
-    type: 'video',
-    url: '/portfolio/assets/12.mkv',
-    name: '3D Animation',
-    isYouTubeVideo: false,
-    enabled: true
-  },
-
 
   {
     id: 13,
     type: '3d',
     url: '/portfolio/assets/11.png',
-    name: 'Bottles 3D Render With Fog',
+    name: 'Unauthorized use is forbidden',
     isYouTubeVideo: false,
     enabled: true
   },
 
+  {
+    id: 12,
+    type: 'video',
+    url: '/portfolio/assets/12.mkv',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
 
   {
-    id: 14,
+    id: 11,
+    type: '3d',
+    url: '/portfolio/assets/3.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 10,
     type: 'thumbnail',
-    url: '/portfolio/assets/editedversion.png',
-    name: 'Bike Racing Thumbnail',
+    url: '/portfolio/assets/4.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 9,
+    type: '3d',
+    url: '/portfolio/assets/10.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 8,
+    type: '3d',
+    url: '/portfolio/assets/9.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 7,
+    type: '3d',
+    url: '/portfolio/assets/8.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 6,
+    type: '3d',
+    url: '/portfolio/assets/7.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 5,
+    type: 'thumbnail',
+    url: '/portfolio/assets/2.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 4,
+    type: 'thumbnail',
+    url: '/portfolio/assets/5.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 3,
+    type: 'thumbnail',
+    url: '/portfolio/assets/6.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 2,
+    type: '3d',
+    url: '/portfolio/assets/myphoto.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
+    id: 1,
+    type: '3d',
+    url: '/portfolio/assets/1.png',
+    name: 'Unauthorized use is forbidden',
     isYouTubeVideo: false,
     enabled: true
   },
