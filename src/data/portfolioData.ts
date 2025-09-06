@@ -157,7 +157,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 14,
     type: 'thumbnail',
-    url: '/portfolio/portfolio/assets/editedversion.png',
+    url: '/portfolio/assets/editedversion.png',
     name: 'Bike Racing Thumbnail',
     isYouTubeVideo: false,
     enabled: true
