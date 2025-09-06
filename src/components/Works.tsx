@@ -203,7 +203,7 @@ const Works = () => {
   const getDisplayUrl = (item: WorkItem): string => {
     if (item.isYouTubeVideo) {
       const thumbnail = getYouTubeThumbnail(item.url);
-      return thumbnail || '/assets/placeholder.png';
+      return thumbnail || '/portfolio/assets/placeholder.png';
     }
     // If the url starts with /, treat as local asset, else external
     if (item.url.startsWith('/')) {
@@ -385,7 +385,7 @@ const Works = () => {
                       }));
                     }}
                     onError={e => {
-                      const placeholder = '/assets/placeholder.png';
+                      const placeholder = '/portfolio/assets/placeholder.png';
                       if (e.currentTarget.src !== window.location.origin + placeholder && e.currentTarget.src !== placeholder) {
                         e.currentTarget.src = placeholder;
                     }
@@ -513,7 +513,7 @@ const Works = () => {
                       console.log('\u274c Modal image failed to load:', modalContent.url);
                       const currentSrc = e.currentTarget.src;
                       const originalUrl = modalContent.url;
-                      const placeholder = '/assets/placeholder.png';
+                      const placeholder = '/portfolio/assets/placeholder.png';
                       
                       // Try different Google Drive formats for modal
                       if (originalUrl.includes('drive.google.com')) {
