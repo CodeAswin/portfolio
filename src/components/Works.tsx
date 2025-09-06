@@ -203,7 +203,7 @@ const Works = () => {
   const getDisplayUrl = (item: WorkItem): string => {
     if (item.isYouTubeVideo) {
       const thumbnail = getYouTubeThumbnail(item.url);
-      return thumbnail || '/portfolio/assets/placeholder.png';
+      return thumbnail || '/assets/placeholder.png';
     }
     // If the url starts with /, treat as local asset, else external
     if (item.url.startsWith('/')) {
@@ -354,11 +354,11 @@ const Works = () => {
                 ) : (
                   <img
                     src={loadedImages.has(item.id) ? getDisplayUrl(item) : ''}
-                    alt={item.name}
+                  alt={item.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 shadow-2xl shadow-cyan-500/30 group-hover:shadow-purple-500/50 animate-glow bg-slate-900 image-optimized"
                     loading="lazy"
-                    referrerPolicy="no-referrer"
-                    crossOrigin="anonymous"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                     data-item-id={item.id}
                     ref={el => {
                       imageRefs.current[item.id] = el;
@@ -374,54 +374,54 @@ const Works = () => {
                       }
                     }}
                     onLoad={e => {
-                      const img = e.currentTarget;
-                      setImageDimensions(prev => ({
-                        ...prev,
-                        [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
-                      }));
+                    const img = e.currentTarget;
+                    setImageDimensions(prev => ({
+                      ...prev,
+                      [item.id]: { width: img.naturalWidth, height: img.naturalHeight }
+                    }));
                       setAspectRatios(prev => ({
                         ...prev,
                         [item.id]: calcAspectClass(img.naturalWidth, img.naturalHeight)
                       }));
                     }}
                     onError={e => {
-                      const placeholder = '/portfolio/assets/placeholder.png';
+                      const placeholder = '/assets/placeholder.png';
                       if (e.currentTarget.src !== window.location.origin + placeholder && e.currentTarget.src !== placeholder) {
                         e.currentTarget.src = placeholder;
-                      }
-                    }}
-                  />
+                    }
+                  }}
+                />
                 )}
               </div>
-
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              {/* Play/View overlay */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Play/View overlay */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className={`w-20 h-20 ${item.isYouTubeVideo ? 'bg-gradient-to-r from-red-500/90 to-red-600/90' : 'bg-gradient-to-r from-cyan-500/80 to-purple-500/80'} backdrop-blur-md rounded-full flex items-center justify-center transform group-hover:scale-150 transition-all duration-500 shadow-2xl animate-glow animate-gradient`}> 
-                  {item.isYouTubeVideo ? (
-                    <Play className="w-8 h-8 text-white ml-1" />
-                  ) : (
-                    <Eye className="w-8 h-8 text-white" />
-                  )}
+                    {item.isYouTubeVideo ? (
+                      <Play className="w-8 h-8 text-white ml-1" />
+                    ) : (
+                      <Eye className="w-8 h-8 text-white" />
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Type indicators */}
-              {item.isYouTubeVideo && (
-                <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
-                  <Play className="w-3 h-3" />
-                  YouTube
-                </div>
-              )}
+                {/* Type indicators */}
+                {item.isYouTubeVideo && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
+                    <Play className="w-3 h-3" />
+                    YouTube
+                  </div>
+                )}
 
-              {isVideoUrl(item.url) && !item.isYouTubeVideo && (
-                <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
-                  <Video className="w-3 h-3" />
-                  Video
-                </div>
-              )}
+                {isVideoUrl(item.url) && !item.isYouTubeVideo && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500/80 backdrop-blur-sm rounded-full text-white text-xs font-semibold flex items-center gap-1">
+                    <Video className="w-3 h-3" />
+                    Video
+                  </div>
+                )}
             </div>
           ))}
         </div>
@@ -513,7 +513,7 @@ const Works = () => {
                       console.log('\u274c Modal image failed to load:', modalContent.url);
                       const currentSrc = e.currentTarget.src;
                       const originalUrl = modalContent.url;
-                      const placeholder = '/portfolio/assets/placeholder.png';
+                      const placeholder = '/assets/placeholder.png';
                       
                       // Try different Google Drive formats for modal
                       if (originalUrl.includes('drive.google.com')) {

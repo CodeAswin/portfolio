@@ -27,7 +27,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 1,
     type: '3d',
-    url: '/portfolio/assets/1.png',
+    url: '/assets/1.png',
     name: '3D Minecraft PFP',
     isYouTubeVideo: false,
     enabled: true
@@ -37,7 +37,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 2,
     type: '3d',
-    url: '/portfolio/assets/myphoto.png',
+    url: '/assets/myphoto.png',
     name: 'Minecraft World Render',
     isYouTubeVideo: false,
     enabled: true
@@ -47,7 +47,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 3,
     type: 'thumbnail',
-    url: '/portfolio/assets/6.png',
+    url: '/assets/6.png',
     name: '3D Minecraft Thumbnail',
     isYouTubeVideo: false,
     enabled: true
@@ -57,7 +57,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 4,
     type: 'thumbnail',
-    url: '/portfolio/assets/5.png',
+    url: '/assets/5.png',
     name: '3D Minecraft Thumbnail',
     isYouTubeVideo: false,
     enabled: true
@@ -67,7 +67,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 5,
     type: 'thumbnail',
-    url: '/portfolio/assets/2.png',
+    url: '/assets/2.png',
     name: '3D Minecraft Thumbnail',
     isYouTubeVideo: false,
     enabled: true
@@ -77,7 +77,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 6,
     type: '3d',
-    url: '/portfolio/assets/7.png',
+    url: '/assets/7.png',
     name: 'BMW Render',
     isYouTubeVideo: false,
     enabled: true
@@ -87,7 +87,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 7,
     type: '3d',
-    url: '/portfolio/assets/8.png',
+    url: '/assets/8.png',
     name: 'BMW Render',
     isYouTubeVideo: false,
     enabled: true
@@ -97,7 +97,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 8,
     type: '3d',
-    url: '/portfolio/assets/9.png',
+    url: '/assets/9.png',
     name: 'BMW Render',
     isYouTubeVideo: false,
     enabled: true
@@ -107,7 +107,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 9,
     type: '3d',
-    url: '/portfolio/assets/10.png',
+    url: '/assets/10.png',
     name: 'Porsche Render',
     isYouTubeVideo: false,
     enabled: true
@@ -117,7 +117,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 10,
     type: 'thumbnail',
-    url: '/portfolio/assets/4.png',
+    url: '/assets/4.png',
     name: 'Friverr Minecraft Thumbnail',
     isYouTubeVideo: false,
     enabled: true
@@ -127,7 +127,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 11,
     type: '3d',
-    url: '/portfolio/assets/3.png',
+    url: '/assets/3.png',
     name: '3D Minecraft World Render',
     isYouTubeVideo: false,
     enabled: true
@@ -137,7 +137,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 12,
     type: 'video',
-    url: '/portfolio/assets/12.mkv',
+    url: '/assets/12.mkv',
     name: '3D Animation',
     isYouTubeVideo: false,
     enabled: true
@@ -147,7 +147,7 @@ export const portfolioItems: WorkItem[] = [
   {
     id: 13,
     type: '3d',
-    url: '/portfolio/assets/11.png',
+    url: '/assets/11.png',
     name: 'Bottles 3D Render With Fog',
     isYouTubeVideo: false,
     enabled: true

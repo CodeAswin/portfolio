@@ -41,7 +41,7 @@ const Modal = () => {
               alt={content.title}
               className="w-full h-auto rounded-lg"
               onError={e => {
-                 const placeholder = '/placeholder.png';
+                 const placeholder = '/assets/placeholder.png';
                  if (e.currentTarget.src !== window.location.origin + placeholder && e.currentTarget.src !== placeholder) {
                    e.currentTarget.src = placeholder;
                  }
