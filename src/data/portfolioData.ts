@@ -25,6 +25,15 @@ export const portfolioItems: WorkItem[] = [
   
   // Latest items first (highest IDs at top)
   {
+    id: 15,
+    type: 'thumbnail',
+    url: '/portfolio/assets/newsss.png',
+    name: 'Unauthorized use is forbidden',
+    isYouTubeVideo: false,
+    enabled: true
+  },
+
+  {
     id: 14,
     type: 'thumbnail',
     url: '/portfolio/assets/editedversion.png',
